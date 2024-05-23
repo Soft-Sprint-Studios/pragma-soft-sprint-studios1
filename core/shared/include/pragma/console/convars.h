@@ -12,7 +12,8 @@
 #include "pragma/networkstate/networkstate.h"
 #include "pragma/lua/luafunction.h"
 #include "pragma/console/cvar_callback.hpp"
-#include <udm.hpp>
+
+import udm;
 
 enum class DLLNETWORK ConType : uint32_t {
 	Var = 0,

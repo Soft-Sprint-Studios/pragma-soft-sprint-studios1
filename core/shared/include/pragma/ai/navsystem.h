@@ -8,7 +8,6 @@
 #define __NAVSYSTEM_H__
 
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
 #include <mathutil/glmutil.h>
 
 class Game;
@@ -23,6 +22,9 @@ class dtNavMesh;
 class dtNavMeshQuery;
 
 class RcNavMesh;
+
+import udm;
+
 class DLLNETWORK RcPathResult {
   public:
 	std::vector<uint32_t> path;

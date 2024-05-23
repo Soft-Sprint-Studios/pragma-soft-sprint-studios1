@@ -9,13 +9,14 @@
 #define __PRAGMA_LUA_TYPES_UDM_HPP__
 
 #include "pragma/definitions.h"
-#include <udm.hpp>
 
 #include <luasystem.h>
 #include <luabind/luabind.hpp>
 #include <luabind/operator.hpp>
 #include <luabind/pseudo_traits.hpp>
 #include <luabind/make_function_signature.hpp>
+
+import udm;
 
 namespace luabind {
 	// Additional types for overload resolution

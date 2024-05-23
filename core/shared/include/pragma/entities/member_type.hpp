@@ -10,8 +10,9 @@
 
 #include "pragma/networkdefinitions.h"
 #include <mathutil/umath.h>
-#include <udm.hpp>
 #include "pragma/entities/entity_uuid_ref.hpp"
+
+import udm;
 
 namespace pragma::ents {
 	enum class EntityMemberType : uint8_t {

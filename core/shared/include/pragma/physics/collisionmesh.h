@@ -9,7 +9,6 @@
 #define __COLLISIONMESH_H__
 
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
 #include <mathutil/glmutil.h>
 #include "pragma/model/modelupdateflags.hpp"
 #include <vector>
@@ -26,6 +25,9 @@ namespace udm {
 	struct AssetData;
 	using Version = uint32_t;
 };
+
+import udm;
+
 class DLLNETWORK CollisionMesh : public std::enable_shared_from_this<CollisionMesh> {
   public:
 	static constexpr auto PCOL_IDENTIFIER = "PCOL";

@@ -24,9 +24,10 @@
 #include "pragma/physics/ik/ik_controller.hpp"
 #include "pragma/phonememap.hpp"
 #include "pragma/game/game_coordinate_system.hpp"
-#include <udm_types.hpp>
 #include <sharedutils/def_handle.h>
 #include <memory>
+
+import udm;
 
 #pragma warning(push)
 #pragma warning(disable : 4251)

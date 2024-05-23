@@ -62,6 +62,9 @@ endif()
 
 def_project(shared lib)
 
+set_target_properties(shared PROPERTIES CXX_SCAN_FOR_MODULES true)
+target_link_libraries(shared util_udm)
+
 # Required for networking library
 link_boost_library(shared DEPENDENCY_BOOST_DATE_TIME_LIBRARY date_time)
 link_boost_library(shared DEPENDENCY_BOOST_REGEX_LIBRARY regex)

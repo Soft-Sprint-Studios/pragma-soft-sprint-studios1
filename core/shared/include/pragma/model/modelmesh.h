@@ -8,13 +8,14 @@
 #ifndef __MODELMESH_H__
 #define __MODELMESH_H__
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
 #include <vector>
 #include <mathutil/glmutil.h>
 #include <mathutil/vertex.hpp>
 #include "pragma/model/modelupdateflags.hpp"
 #include <unordered_map>
 #include <mathutil/transform.hpp>
+
+import udm;
 
 namespace umath {
 	DLLNETWORK void normalize_uv_coordinates(Vector2 &uv);

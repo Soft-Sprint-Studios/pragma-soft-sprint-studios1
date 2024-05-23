@@ -167,6 +167,9 @@ function(register_pragma_module IDENTIFIER)
 		target_link_libraries(${PROJ_NAME} ${${LIB}})
 	endforeach(LIB)
 
+	# Modules
+	target_link_libraries(${PROJ_NAME} util_udm)
+
 	target_include_directories(${PROJ_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include)
 	target_include_directories(${PROJ_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src)
 
