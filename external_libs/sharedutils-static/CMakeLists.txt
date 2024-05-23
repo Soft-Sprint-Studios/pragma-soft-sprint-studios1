@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.28)
+
+include(../../cmake/common.cmake)
 
 set(PROJ_NAME sharedutils-static)
 project(${PROJ_NAME} CXX)
@@ -6,6 +8,10 @@ project(${PROJ_NAME} CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 set(DEPENDENCY_GLM_INCLUDE "" CACHE PATH "Path to GLM include directory.")
+set(DEPENDENCY_GLM_LIBRARY "" CACHE FILEPATH "Path to glm library.")
+if(WIN32)
+	set(DEPENDENCY_GLM_MODULE "" CACHE FILEPATH "Path to glm module.")
+endif()
 set(DEPENDENCY_MATHUTIL_INCLUDE "" CACHE PATH "Path to sharedutils include directory.")
 set(DEPENDENCY_MATHUTIL_LIBRARY "" CACHE FILEPATH "Path to mathutil library. Required if this is compiled as a shared library.")
 
@@ -47,7 +53,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(${PROJ_NAME} PRIVATE -Wno-c++11-narrowing)
 endif()
 
+add_module_references(${PROJ_NAME} ${DEPENDENCY_GLM_MODULE})
+
 target_link_libraries(${PROJ_NAME} ${DEPENDENCY_MATHUTIL_LIBRARY})
+target_link_libraries(${PROJ_NAME} ${DEPENDENCY_GLM_LIBRARY})
+target_link_libraries(${PROJ_NAME} glm_module)
 
 set_target_properties(${PROJ_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${PROJ_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../sharedutils/include)
