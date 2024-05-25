@@ -384,23 +384,6 @@ else:
 		"-DDEPENDENCY_ICU_ICUDT_BINARY=" +icu_root +"/icu/usr/local/lib/libicudata.so"
 	]
 
-########## glm ##########
-os.chdir(third_party_libs_dir)
-get_submodule("glm_cxxmodule","https://github.com/Silverlan/glm_cxxmodule.git","7ac86172639c37ae335b741d8f582d2f269ddfa6")
-
-os.chdir(deps_dir)
-mkdir("glm_cxxmodule_build")
-os.chdir("glm_cxxmodule_build")
-cmake_configure(third_party_libs_dir +"/glm_cxxmodule",generator)
-cmake_build(build_config)
-cmake_args += ["-DDEPENDENCY_GLM_INCLUDE=" +third_party_libs_dir +"/glm_cxxmodule/third_party_libs/glm/"]
-
-if platform == "win32":
-	cmake_args += ["-DDEPENDENCY_GLM_LIBRARY=" +deps_dir +"/glm_cxxmodule_build/" +build_config +"/glm_module.lib"]
-	cmake_args += ["-DDEPENDENCY_GLM_MODULE=" +deps_dir +"/glm_cxxmodule_build/glm_module.dir/" +build_config +"/glm.cppm.ifc"]
-else:
-	cmake_args += ["-DDEPENDENCY_GLM_LIBRARY=" +deps_dir +"/glm_cxxmodule_build/glm_module.a"]
-
 ########## boost ##########
 # Download
 os.chdir(deps_dir)
