@@ -314,6 +314,8 @@ namespace pragma {
 		mutable std::unique_ptr<std::unordered_map<ComponentEventId, std::vector<CallbackHandle>>> m_eventCallbacks;
 		mutable std::unique_ptr<std::unordered_map<ComponentEventId, std::vector<CallbackHandle>>> m_boundEvents;
 	};
+
+	DLLNETWORK std::ostream &operator<<(std::ostream &os, const pragma::BaseEntityComponent &component);
 };
 REGISTER_BASIC_BITWISE_OPERATORS(pragma::BaseEntityComponent::StateFlags)
 

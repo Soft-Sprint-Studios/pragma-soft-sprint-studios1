@@ -63,7 +63,7 @@ namespace Con {
 	  public:
 		friend DLLNETWORK std::basic_ostream<char, std::char_traits<char>> &endl(std::basic_ostream<char, std::char_traits<char>> &os);
 		template<class T>
-		friend Con::c_crit & ::operator<<(Con::c_crit &con, const T &t);
+		friend Con::c_crit & ::operator<<(Con::c_crit & con, const T & t);
 	};
 	class DLLNETWORK c_csv {};
 	class DLLNETWORK c_ccl {};
@@ -252,5 +252,9 @@ Con::c_ccl &operator<<(Con::c_ccl &con, const T &t)
 typedef std::ostream &(*conmanipulator)(std::ostream &);
 DLLNETWORK Con::c_ccl &operator<<(Con::c_ccl &con, conmanipulator manipulator);
 //
+
+namespace pragma {
+	using ::operator<<;
+}
 
 #endif
