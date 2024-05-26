@@ -13,7 +13,7 @@ get_submodule("datasystem","https://github.com/Silverlan/datasystem.git","44219f
 get_submodule("iglfw","https://github.com/Silverlan/iglfw.git","2644d7184bf468676ff184aabff30c35740b79b9","feat/cxx_modules")
 get_submodule("luasystem","https://github.com/Silverlan/luasystem.git","b26d26fd1cbf30a8137d95fb5c373bb6eb3076c7","feat/cxx_modules")
 get_submodule("materialsystem","https://github.com/Silverlan/materialsystem.git","15975559fa01e89533b836e720532df736e5aa36","feat/cxx_modules")
-get_submodule("mathutil","https://github.com/Silverlan/mathutil.git","cb948e755de68ef6a654feb96522681324d11652","feat/cxx_modules")
+get_submodule("mathutil","https://github.com/Silverlan/mathutil.git","923b01eec3df0a3e330a7662aff91a3bc03f6f5e","feat/cxx_modules")
 get_submodule("networkmanager","https://github.com/Silverlan/networkmanager.git","9f074d1bb5a8a8019e817cd8e04b122143eee99b","feat/cxx_modules")
 get_submodule("panima","https://github.com/Silverlan/panima.git","a4cb0b5c961d7548e0a8f9f2729ce0fbefc121c1","feat/cxx_modules")
 get_submodule("prosper","https://github.com/Silverlan/prosper.git","d8794054bcab5c527840439fcf70c46e4db63d52","feat/cxx_modules")
