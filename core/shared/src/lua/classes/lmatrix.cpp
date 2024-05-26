@@ -16,9 +16,9 @@
 #include <pragma/math/angle/wvquaternion.h>
 #include "pragma/lua/classes/ldef_mat4.h"
 #include "pragma/lua/classes/lvector.h"
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/quaternion.hpp>
 #include <Eigen/Eigenvalues>
+
+import glm;
 
 extern DLLNETWORK Engine *engine;
 #define LUA_MATRIX_MEMBERS_DEF(type, maxk, maxm)                                                                                                                                                                                                                                                 \
@@ -55,10 +55,7 @@ extern DLLNETWORK Engine *engine;
 
 #define LUA_MATRIX_MEMBERS_DEF_INVERSE(type, maxk, maxm)                                                                                                                                                                                                                                         \
 	LUA_MATRIX_MEMBERS_DEF(type, maxk, maxm);                                                                                                                                                                                                                                                    \
-	void Lua::Mat##type::Inverse(lua_State *, ::Mat##type &mat)                                                                                                                                                                                                                                  \
-	{                                                                                                                                                                                                                                                                                            \
-		mat = glm::inverse(mat);                                                                                                                                                                                                                                                                 \
-	}                                                                                                                                                                                                                                                                                            \
+	void Lua::Mat##type::Inverse(lua_State *, ::Mat##type &mat) { mat = glm::inverse(mat); }                                                                                                                                                                                                     \
 	void Lua::Mat##type::GetInverse(lua_State *l, const ::Mat##type &mat)                                                                                                                                                                                                                        \
 	{                                                                                                                                                                                                                                                                                            \
 		::Mat##type inv = glm::inverse(mat);                                                                                                                                                                                                                                                     \
@@ -75,17 +72,17 @@ LUA_MATRIX_MEMBERS_DEF_INVERSE(4, 4, 4);
 LUA_MATRIX_MEMBERS_DEF(4x2, 4, 2);
 LUA_MATRIX_MEMBERS_DEF(4x3, 4, 3);
 
-void Lua::Mat4::Translate(lua_State *, ::Mat4 &mat, const Vector3 &pos) { mat = glm::translate(mat, pos); }
+void Lua::Mat4::Translate(lua_State *, ::Mat4 &mat, const Vector3 &pos) { mat = glm::gtx::translate(mat, pos); }
 
 void Lua::Mat4::Rotate(lua_State *, ::Mat4 &mat, const EulerAngles &ang)
 {
-	mat = glm::rotate(mat, CFloat(umath::deg_to_rad(ang.p)), uvec::FORWARD);
-	mat = glm::rotate(mat, CFloat(umath::deg_to_rad(ang.y)), uvec::UP);
-	mat = glm::rotate(mat, CFloat(umath::deg_to_rad(ang.r)), uvec::RIGHT);
+	mat = glm::gtx::rotate(mat, CFloat(umath::deg_to_rad(ang.p)), uvec::FORWARD);
+	mat = glm::gtx::rotate(mat, CFloat(umath::deg_to_rad(ang.y)), uvec::UP);
+	mat = glm::gtx::rotate(mat, CFloat(umath::deg_to_rad(ang.r)), uvec::RIGHT);
 }
-void Lua::Mat4::Rotate(lua_State *, ::Mat4 &mat, const Vector3 &axis, float ang) { mat = glm::rotate(mat, ang, axis); }
+void Lua::Mat4::Rotate(lua_State *, ::Mat4 &mat, const Vector3 &axis, float ang) { mat = glm::gtx::rotate(mat, ang, axis); }
 
-void Lua::Mat4::Scale(lua_State *, ::Mat4 &mat, const Vector3 &scale) { mat = glm::scale(mat, scale); }
+void Lua::Mat4::Scale(lua_State *, ::Mat4 &mat, const Vector3 &scale) { mat = glm::gtx::scale(mat, scale); }
 
 void Lua::Mat4::ToEulerAngles(lua_State *l, const ::Mat4 &mat)
 {
@@ -96,7 +93,7 @@ void Lua::Mat4::ToEulerAngles(lua_State *l, const ::Mat4 &mat)
 
 void Lua::Mat4::ToQuaternion(lua_State *l, const ::Mat4 &mat)
 {
-	Lua::Push<Quat>(l, glm::toQuat(mat));
+	Lua::Push<Quat>(l, Quat {mat});
 	//luabind::object(l,uquat::create(*mat)).push(l);
 }
 
@@ -107,9 +104,9 @@ void Lua::Mat4::Decompose(lua_State *l, const ::Mat4 &mat)
 	Vector3 translation;
 	Vector3 skew;
 	::Vector4 perspective;
-	glm::decompose(mat, scale, rotation, translation, skew, perspective);
+	glm::gtx::decompose(mat, scale, rotation, translation, skew, perspective);
 	Lua::Push<Vector3>(l, scale);
-	Lua::Push<Quat>(l, glm::conjugate(rotation));
+	Lua::Push<Quat>(l, glm::gtx::conjugate(rotation));
 	Lua::Push<Vector3>(l, translation);
 	Lua::Push<Vector3>(l, skew);
 	Lua::Push<::Vector4>(l, perspective);
@@ -117,15 +114,15 @@ void Lua::Mat4::Decompose(lua_State *l, const ::Mat4 &mat)
 
 ::Mat4 Lua::matrix::create_orthogonal_matrix(float left, float right, float bottom, float top, float zNear, float zFar)
 {
-	auto p = glm::ortho(left, right, bottom, top, zNear, zFar);
-	p = glm::scale(p, Vector3(1.f, -1.f, 1.f));
+	auto p = glm::gtx::ortho(left, right, bottom, top, zNear, zFar);
+	p = glm::gtx::scale(p, Vector3(1.f, -1.f, 1.f));
 	return p;
 }
 
 ::Mat4 Lua::matrix::create_perspective_matrix(float fov, float aspectRatio, float zNear, float zFar)
 {
-	auto p = glm::perspective(fov, aspectRatio, zNear, zFar);
-	p = glm::scale(p, Vector3(1.f, -1.f, 1.f));
+	auto p = glm::gtx::perspective(fov, aspectRatio, zNear, zFar);
+	p = glm::gtx::scale(p, Vector3(1.f, -1.f, 1.f));
 	return p;
 }
 

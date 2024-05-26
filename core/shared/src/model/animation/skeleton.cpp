@@ -8,8 +8,10 @@
 #include "pragma/model/animation/skeleton.hpp"
 #include "pragma/model/animation/bone.hpp"
 #include <functional>
-#include <udm.hpp>
 #include <sharedutils/util_string.h>
+
+import udm;
+
 #pragma optimize("", off)
 std::shared_ptr<pragma::animation::Skeleton> pragma::animation::Skeleton::Load(const udm::AssetData &data, std::string &outErr)
 {

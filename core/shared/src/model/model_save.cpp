@@ -19,9 +19,10 @@
 #include "pragma/logging.hpp"
 #include <fsys/filesystem.h>
 #include <sharedutils/util_file.h>
-#include <udm.hpp>
 #include "pragma/model/animation/skeleton.hpp"
 #include "pragma/model/animation/bone.hpp"
+
+import udm;
 
 #define INDEX_OFFSET_INDEX_SIZE sizeof(uint64_t)
 #define INDEX_OFFSET_MODEL_DATA 0

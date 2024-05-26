@@ -64,7 +64,7 @@ void BaseTriggerPushComponent::OnTick(double dt)
 		auto t = umath::min(info.t, static_cast<float>(dt) / m_kvChangeDuration);
 		auto pVelComponentEnt = ent->GetComponent<pragma::VelocityComponent>();
 		auto vel = pVelComponentEnt.valid() ? pVelComponentEnt->GetVelocity() : Vector3 {};
-		vel = glm::slerp(uvec::get_normal(vel), m_kvPushDir, t) * uvec::length(vel);
+		vel = glm::gtc::slerp(uvec::get_normal(vel), m_kvPushDir, t) * uvec::length(vel);
 		//uvec::rotate(&vel,info.rotation *t);
 		if(pVelComponentEnt.valid())
 			pVelComponentEnt->SetVelocity(vel);

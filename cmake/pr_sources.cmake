@@ -56,7 +56,7 @@ function(pr_add_module_list TARGET_NAME MODULE_LIST)
 	endforeach()
 
 	target_sources(${TARGET_NAME}
-		PUBLIC
+		PRIVATE
 			FILE_SET cxx_modules TYPE CXX_MODULES FILES ${MODULE_LIST}
 	)
 endfunction()

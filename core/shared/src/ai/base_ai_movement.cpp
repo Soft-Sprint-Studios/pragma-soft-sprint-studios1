@@ -19,7 +19,8 @@
 #include "pragma/physics/controller.hpp"
 #include "pragma/physics/shape.hpp"
 #include <pragma/physics/movetypes.h>
-#include <glm/gtx/projection.hpp>
+
+import glm;
 
 #define AI_OBSTRUCTION_CHECK_RAYCAST_TYPE_RAY 0
 #define AI_OBSTRUCTION_CHECK_RAYCAST_TYPE_SWEEP 1
@@ -466,7 +467,7 @@ void BaseAIComponent::ResolvePathObstruction(Vector3 &dir)
 		{
 			m_obstruction.pathObstructed = true;
 			auto aimDir = pTrComponent->GetForward();
-			auto newDir = aimDir - glm::proj(aimDir, r.normal);
+			auto newDir = aimDir - glm::gtx::proj(aimDir, r.normal);
 			uvec::normalize(&newDir);
 			dir = newDir;
 			m_obstruction.resolveDirection = dir;

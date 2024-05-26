@@ -12,7 +12,8 @@
 #include "pragma/entities/entity_component_manager_t.hpp"
 #include "pragma/logging.hpp"
 #include <sharedutils/util_hash.hpp>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 void pragma::AnimationDriverComponent::RegisterEvents(pragma::EntityComponentManager &componentManager, TRegisterComponentEvent registerEvent) {}
@@ -50,7 +51,7 @@ void AnimationDriverComponent::UpdateParameters()
 
 	m_descriptor.ClearConstants();
 	auto udmConstants = (*m_parameters)["constants"];
-	for(auto pair : udmConstants.ElIt()) {
+	for(auto pair : udm::ElIt {udmConstants}) {
 		auto *prop = pair.property.GetProperty();
 		if(!prop) {
 			spdlog::trace("Animation driver '{}' has invalid constant parameter '{}'!", GetEntity().ToString(), pair.key);
@@ -63,7 +64,7 @@ void AnimationDriverComponent::UpdateParameters()
 
 	m_descriptor.ClearReferences();
 	auto udmReferences = (*m_parameters)["references"];
-	for(auto pair : udmReferences.ElIt()) {
+	for(auto pair : udm::ElIt {udmReferences}) {
 		auto val = pair.property.ToValue<udm::String>();
 		if(!val) {
 			spdlog::trace("Animation driver '{}' has invalid reference parameter '{}'!", GetEntity().ToString(), pair.key);

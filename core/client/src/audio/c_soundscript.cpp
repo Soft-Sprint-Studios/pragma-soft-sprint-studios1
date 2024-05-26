@@ -12,7 +12,8 @@
 #include "pragma/audio/c_sound_efx.hpp"
 #include <alsoundsystem.hpp>
 #include <algorithm>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLCLIENT CEngine *c_engine;
 extern ClientState *client;

@@ -16,8 +16,9 @@
 #include "pragma/lua/classes/ldef_mat4.h"
 #include "pragma/util/util_best_fitting_plane.hpp"
 #include "pragma/math/util_engine_math.hpp"
-#include <glm/gtx/projection.hpp>
 #include <sharedutils/scope_guard.h>
+
+import glm;
 
 umath::Vertex Lua::Vertex::Copy(umath::Vertex &v) { return v; }
 umath::VertexWeight Lua::VertexWeight::Copy(umath::VertexWeight &vw) { return vw; }
@@ -31,7 +32,7 @@ static const Vector3 vPitch(1, 0, 0);
 static const Vector3 vYaw(0, 1, 0);
 static const Vector3 vRoll(0, 0, 1);
 void Lua::Vector::Rotate(lua_State *, Vector3 &vec, const EulerAngles &ang) { uvec::rotate(&vec, ang); }
-void Lua::Vector::Rotate(lua_State *, Vector3 &vec, const Vector3 &normal, float angle) { vec = glm::rotate(vec, angle, normal); }
+void Lua::Vector::Rotate(lua_State *, Vector3 &vec, const Vector3 &normal, float angle) { vec = glm::gtx::rotate(vec, angle, normal); }
 void Lua::Vector::Rotate(lua_State *, Vector3 &vec, const Quat &orientation) { uvec::rotate(&vec, orientation); }
 void Lua::Vector::RotateAround(lua_State *, Vector3 &vec, const Vector3 &origin, const EulerAngles &ang) { uvec::rotate_around(&vec, ang, origin); }
 ::Vector3 Lua::Vector::Copy(lua_State *l, const Vector3 &vec) { return vec; }
@@ -51,7 +52,7 @@ void Lua::Vector::Set(lua_State *, Vector3 &vec, float x, float y, float z)
 	vec.z = z;
 }
 
-Mat4 Lua::Vector::ToMatrix(lua_State *l, const Vector3 &vec) { return glm::translate(umat::identity(), vec); }
+Mat4 Lua::Vector::ToMatrix(lua_State *l, const Vector3 &vec) { return glm::gtx::translate(umat::identity(), vec); }
 
 void Lua::Vector::SnapToGrid(lua_State *, Vector3 &vec, UInt32 gridSize) { uvec::snap_to_grid(vec, gridSize); }
 void Lua::Vector::SnapToGrid(lua_State *l, Vector3 &vec) { Lua::Vector::SnapToGrid(l, vec, 1); }
@@ -85,10 +86,10 @@ float Lua::Vector2::DistanceSqr(const ::Vector2 &a, const ::Vector2 &b)
 }
 ::Vector2 Lua::Vector2::Cross(lua_State *l, const ::Vector2 &a, const ::Vector2 &b)
 {
-	Vector3 cross = glm::cross(Vector3(a.x, a.y, 0), Vector3(b.x, b.y, 0));
+	Vector3 cross = glm::gtx::cross(Vector3(a.x, a.y, 0), Vector3(b.x, b.y, 0));
 	return ::Vector2(cross.x, cross.y);
 }
-float Lua::Vector2::DotProduct(lua_State *l, const ::Vector2 &a, const ::Vector2 &b) { return glm::dot(Vector3(a.x, a.y, 0), Vector3(b.x, b.y, 0)); }
+float Lua::Vector2::DotProduct(lua_State *l, const ::Vector2 &a, const ::Vector2 &b) { return glm::gtx::dot(Vector3(a.x, a.y, 0), Vector3(b.x, b.y, 0)); }
 void Lua::Vector2::Rotate(lua_State *, ::Vector2 &vec, const EulerAngles &ang)
 {
 	Vector3 v = Vector3(vec.x, vec.y, 0);
@@ -120,17 +121,17 @@ void Lua::Vector2::Set(lua_State *, ::Vector2 &vec, float x, float y)
 	vec.x = x;
 	vec.y = y;
 }
-::Vector2 Lua::Vector2::Project(lua_State *l, const ::Vector2 &vec, const ::Vector2 &n) { return glm::proj(vec, n); }
+::Vector2 Lua::Vector2::Project(lua_State *l, const ::Vector2 &vec, const ::Vector2 &n) { return glm::gtx::proj(vec, n); }
 
 ////////////////////////
 
-Vector4 Lua::Vector4::GetNormal(const ::Vector4 &vec) { return glm::normalize(vec); }
-void Lua::Vector4::Normalize(::Vector4 &vec) { vec = glm::normalize(vec); }
-float Lua::Vector4::Length(const ::Vector4 &vec) { return glm::length(vec); }
-float Lua::Vector4::LengthSqr(const ::Vector4 &vec) { return glm::length2(vec); }
-float Lua::Vector4::Distance(const ::Vector4 &a, const ::Vector4 &b) { return glm::distance(a, b); }
-float Lua::Vector4::DistanceSqr(const ::Vector4 &a, const ::Vector4 &b) { return glm::distance2(a, b); }
-float Lua::Vector4::DotProduct(lua_State *l, const ::Vector4 &a, const ::Vector4 &b) { return glm::dot(a, b); }
+Vector4 Lua::Vector4::GetNormal(const ::Vector4 &vec) { return glm::gtx::normalize(vec); }
+void Lua::Vector4::Normalize(::Vector4 &vec) { vec = glm::gtx::normalize(vec); }
+float Lua::Vector4::Length(const ::Vector4 &vec) { return glm::gtx::length(vec); }
+float Lua::Vector4::LengthSqr(const ::Vector4 &vec) { return glm::gtx::length2(vec); }
+float Lua::Vector4::Distance(const ::Vector4 &a, const ::Vector4 &b) { return glm::gtx::distance(a, b); }
+float Lua::Vector4::DistanceSqr(const ::Vector4 &a, const ::Vector4 &b) { return glm::gtx::distance2(a, b); }
+float Lua::Vector4::DotProduct(lua_State *l, const ::Vector4 &a, const ::Vector4 &b) { return glm::gtx::dot(a, b); }
 ::Vector4 Lua::Vector4::Copy(lua_State *l, const ::Vector4 &vec) { return ::Vector4(vec.x, vec.y, vec.z, vec.w); }
 ::Vector4 Lua::Vector4::Lerp(lua_State *l, const ::Vector4 &vec, const ::Vector4 &vecB, float factor) { return vec + (vecB - vec) * factor; }
 void Lua::Vector4::Set(lua_State *, ::Vector4 &vec, const ::Vector4 &vecB)
@@ -147,7 +148,7 @@ void Lua::Vector4::Set(lua_State *, ::Vector4 &vec, float x, float y, float z, f
 	vec.y = y;
 	vec.z = z;
 }
-::Vector4 Lua::Vector4::Project(lua_State *l, const ::Vector4 &vec, const ::Vector4 &n) { return glm::proj(vec, n); }
+::Vector4 Lua::Vector4::Project(lua_State *l, const ::Vector4 &vec, const ::Vector4 &n) { return glm::gtx::proj(vec, n); }
 
 ////////////////////////
 

@@ -21,7 +21,8 @@
 #include <sharedutils/datastream.h>
 #include "pragma/physics/raytraces.h"
 #include "pragma/entities/baseentity_trace.hpp"
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

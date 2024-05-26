@@ -13,7 +13,8 @@
 #include "pragma/console/c_cvar_global_functions.h"
 #include <pragma/c_engine.h>
 #include <alsound_effect.hpp>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLCLIENT CEngine *c_engine;
 

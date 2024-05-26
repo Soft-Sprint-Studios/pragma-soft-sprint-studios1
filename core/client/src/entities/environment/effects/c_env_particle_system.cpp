@@ -20,7 +20,8 @@
 #include <pragma/entities/components/base_transform_component.hpp>
 #include <pragma/entities/entity_component_system_t.hpp>
 #include <pragma/entities/environment/effects/particlesystemdata.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

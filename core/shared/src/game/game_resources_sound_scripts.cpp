@@ -10,7 +10,8 @@
 #include "pragma/audio/alsound_type.h"
 #include <se_script.hpp>
 #include <sharedutils/util_file.h>
-#include <udm.hpp>
+
+import udm;
 
 bool util::port_sound_script(NetworkState *nw, const std::string &path)
 {

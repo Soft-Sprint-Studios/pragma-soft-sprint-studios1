@@ -71,6 +71,6 @@ luabind::mult<Vector3, Vector3> Lua::boundingvolume::GetRotatedAABB(lua_State *l
 {
 	Vector3 rmin;
 	Vector3 rmax;
-	Transform_Box(glm::toMat3(rot), min, max, rmin, rmax);
+	Transform_Box(Mat3 {rot}, min, max, rmin, rmax);
 	return {l, rmin, rmax};
 }

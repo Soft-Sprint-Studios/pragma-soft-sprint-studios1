@@ -73,7 +73,8 @@
 #include <pragma/entities/components/map_component.hpp>
 #include <pragma/entities/components/velocity_component.hpp>
 #include <pragma/entities/entity_component_system_t.hpp>
-#include <udm.hpp>
+
+import udm;
 
 extern "C" {
 #include "bzlib.h"

@@ -14,9 +14,10 @@
 #include <mathutil/umath.h>
 #include <mathutil/eulerangles.h>
 #include <mathutil/transform.hpp>
-#include <udm_types.hpp>
 #include "pragma/game/game_coordinate_system.hpp"
 #include "pragma/util/global_string_table.hpp"
+
+import udm;
 
 namespace pragma::ik {
 	// We'll assume 73 units to be roughly the size of a human and use that as a reference, i.e. a scale of 1.0 represents 73 game units

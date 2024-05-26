@@ -18,8 +18,9 @@
 #include "pragma/lua/types/udm.hpp"
 #include "pragma/util/global_string_table.hpp"
 #include <pragma/lua/luaapi.h>
-#include <udm.hpp>
 #include <any>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 

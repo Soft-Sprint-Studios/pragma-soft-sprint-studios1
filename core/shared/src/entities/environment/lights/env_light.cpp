@@ -16,8 +16,9 @@
 #include "pragma/entities/environment/lights/env_light_directional.h"
 #include "pragma/entities/entity_component_manager_t.hpp"
 #include "pragma/entities/baseentity_events.hpp"
-#include <udm.hpp>
 #include <algorithm>
+
+import udm;
 
 using namespace pragma;
 

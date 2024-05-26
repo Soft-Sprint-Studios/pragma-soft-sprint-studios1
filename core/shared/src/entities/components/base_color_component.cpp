@@ -11,7 +11,8 @@
 #include "pragma/entities/components/panima_component.hpp"
 #include "pragma/entities/baseentity_events.hpp"
 #include "pragma/entities/entity_component_manager_t.hpp"
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

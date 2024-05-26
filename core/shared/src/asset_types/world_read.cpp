@@ -9,6 +9,8 @@
 #include "pragma/asset_types/world.hpp"
 #include "pragma/level/level_info.hpp"
 
+import udm;
+
 extern DLLNETWORK Engine *engine;
 
 void pragma::asset::Output::Read(VFilePtr &f)
@@ -23,7 +25,6 @@ void pragma::asset::Output::Read(VFilePtr &f)
 
 /////////
 
-#include <udm.hpp>
 bool pragma::asset::WorldData::Read(VFilePtr &f, EntityData::Flags entMask, std::string *errMsg)
 {
 	auto header = f->Read<std::array<char, 3>>();

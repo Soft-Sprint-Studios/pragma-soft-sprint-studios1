@@ -9,7 +9,6 @@
 #include "pragma/model/animation/animation.hpp"
 #include "pragma/model/animation/activities.h"
 #include "pragma/logging.hpp"
-#include <udm.hpp>
 #include <mathutil/umath.h>
 #include "pragma/model/animation/skeleton.hpp"
 #include <panima/animation.hpp>
@@ -17,6 +16,8 @@
 #include "pragma/model/animation/bone.hpp"
 #include <bezier_fit.hpp>
 //#include <utility>
+
+import udm;
 
 decltype(pragma::animation::Animation::s_activityEnumRegister) pragma::animation::Animation::s_activityEnumRegister;
 decltype(pragma::animation::Animation::s_eventEnumRegister) pragma::animation::Animation::s_eventEnumRegister;

@@ -8,7 +8,6 @@
 #ifndef __SKELETON_UTIL_HPP__
 #define __SKELETON_UTIL_HPP__
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
 #include <iostream>
 #include <vector>
 #include <mathutil/glmutil.h>
@@ -16,6 +15,8 @@
 #include <unordered_map>
 #include "pragma/math/orientation.h"
 #include "pragma/physics/jointinfo.h"
+
+import udm;
 
 struct DLLNETWORK BoneList // Simplified Skeleton without an hierarchy
 {

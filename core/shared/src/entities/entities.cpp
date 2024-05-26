@@ -57,7 +57,8 @@ BaseEntity *Game::CreateMapEntity(pragma::asset::EntityData &entData)
 		if(c.expired())
 			continue;
 		auto udmData = pair.second->GetData();
-		for(auto &pair : udm::LinkedPropertyWrapper {*udmData}.ElIt()) {
+		udm::LinkedPropertyWrapper prop {*udmData};
+		for(auto &pair : udm::ElIt {prop}) {
 			auto *memberInfo = c->FindMemberInfo(std::string {pair.key});
 			if(!memberInfo || !memberInfo->setterFunction || !pragma::ents::is_udm_member_type(memberInfo->type))
 				continue;

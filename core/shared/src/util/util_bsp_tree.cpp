@@ -7,7 +7,8 @@
 
 #include "stdafx_shared.h"
 #include "pragma/util/util_bsp_tree.hpp"
-#include <udm.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 

@@ -14,7 +14,8 @@
 #include "datasystem.h"
 #include <mathutil/umath.h>
 #include <sharedutils/util_string.h>
-#include <udm.hpp>
+
+import udm;
 
 #undef CreateEvent
 
@@ -61,7 +62,7 @@ bool SoundScriptManager::Load(const char *fname, const std::function<std::shared
 		return false;
 	auto &data = *udmData;
 	auto udm = data.GetAssetData().GetData();
-	for(auto pair : udm.ElIt()) {
+	for(auto pair : udm::ElIt {udm}) {
 		std::string name {pair.key};
 		StringToLower(name);
 		// Note: std::shared_ptr<TSoundScript>(new TSoundScript{this,it->first}); causes weird compiler errors for CSoundScript (clientside), but this works

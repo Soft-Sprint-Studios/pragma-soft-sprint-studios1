@@ -20,7 +20,8 @@
 #include "pragma/util/util_handled.hpp"
 #include "pragma/entities/baseentity_events.hpp"
 #include "pragma/game/game_coordinate_system.hpp"
-#include <glm/gtx/euler_angles.hpp>
+
+import glm;
 
 using namespace pragma;
 

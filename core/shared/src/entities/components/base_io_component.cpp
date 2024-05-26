@@ -11,7 +11,8 @@
 #include "pragma/entities/components/base_name_component.hpp"
 #include "pragma/lua/libraries/ltimer.h"
 #include <pragma/game/game.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 
@@ -49,7 +50,7 @@ void BaseIOComponent::Load(udm::LinkedPropertyWrapperArg udm, uint32_t version)
 	BaseEntityComponent::Load(udm, version);
 	auto udmOutputs = udm["outputs"];
 	auto numOutputs = udmOutputs.GetChildCount();
-	for(auto udmOutputList : udmOutputs.ElIt()) {
+	for(auto udmOutputList : udm::ElIt{udmOutputs}) {
 		auto &outputs = m_outputs[std::string {udmOutputList.key}] = {};
 		auto udmOutputs = udmOutputList.property;
 		outputs.resize(udmOutputs.GetSize());

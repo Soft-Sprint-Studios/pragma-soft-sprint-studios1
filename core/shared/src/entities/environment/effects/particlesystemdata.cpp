@@ -11,7 +11,8 @@
 #include <sharedutils/util_string.h>
 #include <sharedutils/util_file.h>
 #include <sharedutils/util_path.hpp>
-#include <udm.hpp>
+
+import udm;
 
 // See c_particlesystem_save.cpp as well
 bool pragma::asset::save_particle_system(VFilePtrReal &f, const std::unordered_map<std::string, CParticleSystemData> &particles, const std::string &rootPath)

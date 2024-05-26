@@ -67,7 +67,8 @@
 #include <pragma/lua/converters/game_type_converters_t.hpp>
 #include <pragma/localization.h>
 #include <wgui/fontmanager.h>
-#include <udm.hpp>
+
+import udm;
 
 #undef LEFT
 #undef RIGHT

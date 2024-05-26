@@ -15,7 +15,8 @@
 #include <fsys/filesystem.h>
 #include <mathutil/uvec.h>
 #include <unordered_set>
-#include <udm.hpp>
+
+import udm;
 
 #undef GetClassName
 

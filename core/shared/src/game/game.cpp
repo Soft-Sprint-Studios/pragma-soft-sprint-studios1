@@ -63,7 +63,8 @@
 #include <sharedutils/util_library.hpp>
 #include <fsys/ifile.hpp>
 #include <luainterface.hpp>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 
@@ -518,13 +519,13 @@ void Game::InitializeGame()
 		if(udmData) {
 			auto &data = *udmData;
 			auto udm = data.GetAssetData().GetData();
-			for(auto pair : udm.ElIt()) {
+			for(auto pair : udm::ElIt {udm}) {
 				auto &identifier = pair.key;
 				auto hTireType = tireTypeManager.RegisterType(std::string {identifier});
 				if(hTireType.IsExpired())
 					continue;
 				auto udmFrictionModifiers = pair.property["friction_modifiers"];
-				for(auto pair : udmFrictionModifiers.ElIt()) {
+				for(auto pair : udm::ElIt {udmFrictionModifiers}) {
 					auto &surfaceType = pair.key;
 					auto surfType = surfTypeManager.RegisterType(std::string {surfaceType});
 					auto friction = 1.f;

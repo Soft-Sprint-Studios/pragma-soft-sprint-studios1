@@ -25,7 +25,8 @@
 #include "pragma/model/model.h"
 #include "pragma/util/util_game.hpp"
 #include <sharedutils/scope_guard.h>
-#include <udm.hpp>
+
+import udm;
 
 RcNavMesh::RcNavMesh(const std::shared_ptr<rcPolyMesh> &polyMesh, const std::shared_ptr<rcPolyMeshDetail> &polyMeshDetail, const std::shared_ptr<dtNavMesh> &navMesh) : m_polyMesh(polyMesh), m_polyMeshDetail(polyMeshDetail), m_navMesh(navMesh) {}
 

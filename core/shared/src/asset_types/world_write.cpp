@@ -13,7 +13,8 @@
 #include <util_texture_info.hpp>
 #include <sharedutils/util_file.h>
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 
@@ -173,7 +174,7 @@ bool pragma::asset::WorldData::LoadFromAssetData(const udm::AssetData &data, Ent
 			}
 		}
 		else {
-			for(auto pair : udmComponents.ElIt()) {
+			for(auto pair : udm::ElIt {udmComponents}) {
 				auto name = pair.key;
 				auto &udmComponent = pair.property;
 				auto component = entData->AddComponent(std::string {name});

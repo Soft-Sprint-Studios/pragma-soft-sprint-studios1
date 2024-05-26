@@ -10,7 +10,8 @@
 #include "pragma/entities/components/base_entity_component.hpp"
 #include "pragma/entities/entity_uuid_ref.hpp"
 #include "pragma/game/value_driver.hpp"
-#include <udm.hpp>
+
+import udm;
 
 struct AnimationEvent;
 namespace util {

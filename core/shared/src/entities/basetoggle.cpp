@@ -14,7 +14,8 @@
 #include "pragma/entities/entity_component_manager_t.hpp"
 #include <sharedutils/datastream.h>
 #include <algorithm>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

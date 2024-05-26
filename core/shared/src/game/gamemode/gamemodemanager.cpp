@@ -11,7 +11,8 @@
 #include <fsys/filesystem.h>
 #include <sharedutils/util.h>
 #include <sharedutils/scope_guard.h>
-#include <udm.hpp>
+
+import udm;
 
 std::unordered_map<std::string, GameModeInfo> GameModeManager::m_gameModes;
 void GameModeManager::Initialize()
@@ -28,7 +29,7 @@ void GameModeManager::Initialize()
 		if(udmData == nullptr)
 			continue;
 		auto udm = udmData->GetAssetData().GetData();
-		for(auto &pair : udm.ElIt()) {
+		for(auto &pair : udm::ElIt {udm}) {
 			if(!pair.property.IsType(udm::Type::Element))
 				continue;
 			auto udmGm = pair.property;
@@ -45,7 +46,8 @@ void GameModeManager::Initialize()
 			udmGm["name"](gmInfo.name);
 			udmGm["author"](gmInfo.author);
 			udmGm["initial_map"](gmInfo.initial_map);
-			for(auto &pair : udmGm["mount_priorities"].ElIt())
+			auto udmMountPriorities = udmGm["mount_priorities"];
+			for(auto &pair : udm::ElIt {udmMountPriorities})
 				gmInfo.gameMountPriorities[std::string {pair.key}] = pair.property.ToValue<udm::Int32>(0);
 
 			std::string version {};

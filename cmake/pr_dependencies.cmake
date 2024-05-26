@@ -162,7 +162,7 @@ function(pr_add_dependency TARGET_NAME DEPENDENCY_TARGET_NAME DEPENDENCY_TYPE)
     endif()
 
     if(NOT PA_LINK_ONLY AND NOT DEPENDENCY_TYPE STREQUAL "TARGET")
-        pr_add_include_dir(${TARGET_NAME} ${IDENTIFIER} ${VISIBILITY})
+        pr_add_include_dir(${TARGET_NAME} ${DEPENDENCY_TARGET_NAME} ${VISIBILITY})
     endif()
 
     if(DEPENDENCY_TYPE STREQUAL "TARGET" OR DEPENDENCY_TYPE STREQUAL "MODULE")
@@ -179,7 +179,7 @@ function(pr_add_dependency TARGET_NAME DEPENDENCY_TARGET_NAME DEPENDENCY_TYPE)
 
     if(WIN32 AND DEPENDENCY_TYPE STREQUAL "MODULE")
         set(BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-        if(NOT DEFINED PA_BIN_DIR)
+        if(DEFINED PA_BIN_DIR)
             set(BIN_DIR "${PA_BIN_DIR}")
         endif()
         pr_reference_module(${TARGET_NAME} ${DEPENDENCY_TARGET_NAME} "${BIN_DIR}")

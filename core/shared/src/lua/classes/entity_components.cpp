@@ -38,11 +38,12 @@
 #include "pragma/physics/shape.hpp"
 #include "pragma/util/render_tile.hpp"
 #include "pragma/lua/ostream_operator_alias.hpp"
-#include <udm.hpp>
 #include <luabind/out_value_policy.hpp>
 #include <luabind/copy_policy.hpp>
 #include <luabind/discard_result_policy.hpp>
 #include <fmt/core.h>
+
+import udm;
 
 namespace Lua {
 	template<typename... Types>

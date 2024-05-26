@@ -12,12 +12,13 @@ function(pr_add_module_reference TARGET_NAME IDENTIFIER)
 
         pr_get_normalized_identifier_name(${IDENTIFIER})
 
-		set(DEFAULT_MODULE "")
-		set(DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE ${DEFAULT_MODULE} CACHE PATH "Path to ${PRETTY_IDENTIFIER} module file.")
+		#set(DEFAULT_MODULE "")
+		#set(DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE ${DEFAULT_MODULE} CACHE PATH "Path to ${PRETTY_IDENTIFIER} module file.")
 
 		message("[PR] Adding module reference \"${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE}\" (${NORMALIZED_IDENTIFIER}) to target ${TARGET_NAME}")
         # Note: There must *not* be a space between "/reference" and the path, otherwise only one /reference will be recoginized.
-        target_compile_options(${PROJ_NAME} ${VISIBILITY} /reference${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE})
+        #target_compile_options(${PROJ_NAME} ${VISIBILITY} /reference${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE})
+        target_compile_options(${PROJ_NAME} ${VISIBILITY} $<$<BOOL:${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE}>:/reference${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE}>)
 	endif()
 endfunction()
 
@@ -57,12 +58,37 @@ function(pr_reference_module TARGET_NAME MODULE_NAME BIN_DIR)
         if(PA_PUBLIC)
             set(VISIBILITY PUBLIC)
         endif()
-
-        pr_get_module_file_path(${MODULE_NAME} ${BIN_DIR} TARGET_NAME "${MODULE_TARGET_NAME}")
-
-        pr_get_normalized_identifier_name(${MODULE_NAME})
-        set(DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE "${MODULE_FILE_PATH}" CACHE PATH "Path to ${PRETTY_IDENTIFIER} module file.")
+        
+        #pr_get_module_file_path(${MODULE_NAME} ${BIN_DIR} TARGET_NAME "${MODULE_TARGET_NAME}")
+        #pr_get_normalized_identifier_name(${MODULE_NAME})
+        #set(DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE "${MODULE_FILE_PATH}" CACHE PATH "Path to ${PRETTY_IDENTIFIER} module file.")
 
         pr_add_module_reference(${TARGET_NAME} ${MODULE_NAME} ${VISIBILITY})
     endif()
+endfunction()
+
+function(pr_init_module TARGET_NAME)
+	set(options)
+	set(oneValueArgs SRC_PATH)
+	set(multiValueArgs)
+	cmake_parse_arguments(PARSE_ARGV 1 PA "${options}" "${oneValueArgs}" "${multiValueArgs}")
+
+	set(SRC_PATH "src/")
+	if(DEFINED PA_SRC_PATH)
+		set(SRC_PATH "src/" "${PA_SRC_PATH}")
+	endif()
+
+	pr_add_headers(${TARGET_NAME} "${SRC_PATH}" PRIVATE)
+	pr_add_sources(${TARGET_NAME} "${SRC_PATH}")
+	pr_add_modules(${TARGET_NAME} "${SRC_PATH}")
+
+	set(BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+	set(MODULE_NAME "${TARGET_NAME}")
+	if(NOT "${PA_UNPARSED_ARGUMENTS}" STREQUAL "")
+		list(GET PA_UNPARSED_ARGUMENTS 0 MODULE_NAME)
+	endif()
+	pr_get_module_file_path(${MODULE_NAME} ${BIN_DIR} TARGET_NAME "${TARGET_NAME}")
+	pr_get_normalized_identifier_name(${TARGET_NAME})
+	message("[PR] Initialized module ${TARGET_NAME} with module file \"${MODULE_FILE_PATH}\".")
+	set(DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE "${MODULE_FILE_PATH}" CACHE PATH "Path to ${PRETTY_IDENTIFIER} module file.")
 endfunction()

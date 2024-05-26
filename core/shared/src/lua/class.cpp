@@ -82,7 +82,8 @@
 #include <mathutil/inverse_kinematics/constraints.hpp>
 #include <sharedutils/magic_enum.hpp>
 #include <fsys/directory_watcher.h>
-#include <glm/gtx/matrix_decompose.hpp>
+
+import glm;
 
 extern DLLNETWORK Engine *engine;
 std::ostream &operator<<(std::ostream &out, const ALSound &snd)
@@ -897,7 +898,7 @@ void NetworkState::RegisterSharedLuaClasses(Lua::Interface &lua)
 		Vector3 translation;
 		Vector3 skew;
 		Vector4 perspective;
-		glm::decompose(transformation, scale, rotation, translation, skew, perspective);
+		glm::gtx::decompose(transformation, scale, rotation, translation, skew, perspective);
 		t.SetOrigin(translation);
 		t.SetRotation(rotation);
 	}));
@@ -1216,7 +1217,7 @@ void NetworkState::RegisterSharedLuaClasses(Lua::Interface &lua)
 	}));
 	defVector->def("GetAngle", static_cast<float (*)(lua_State *, const Vector3 &, const Vector3 &)>([](lua_State *l, const Vector3 &a, const Vector3 &b) -> float { return umath::deg_to_rad(uvec::get_angle(a, b)); }));
 	defVector->def("Slerp", static_cast<void (*)(lua_State *, const Vector3 &, const Vector3 &, float)>([](lua_State *l, const Vector3 &a, const Vector3 &b, float factor) {
-		auto result = glm::slerp(a, b, factor);
+		auto result = glm::gtx::slerp(a, b, factor);
 		Lua::Push<Vector3>(l, result);
 	}));
 	defVector->def("Copy", &Lua::Vector::Copy);
@@ -1380,8 +1381,10 @@ void NetworkState::RegisterSharedLuaClasses(Lua::Interface &lua)
 	defQuat->def("Normalize", &uquat::normalize);
 	defQuat->def("GetNormal", &uquat::get_normal);
 	defQuat->def("Copy", &Lua::Quaternion::Copy);
-	defQuat->def("ToMatrix", static_cast<Mat4 (*)(const Quat &)>(&glm::toMat4));
-	defQuat->def("ToMatrix3", static_cast<Mat3 (*)(const Quat &)>(&glm::toMat3));
+	defQuat->def(
+	  "ToMatrix", +[](const Quat &rot) -> Mat4 { return Mat4 {rot}; });
+	defQuat->def(
+	  "ToMatrix3", +[](const Quat &rot) -> Mat3 { return Mat3 {rot}; });
 	defQuat->def("Lerp", &uquat::lerp);
 	defQuat->def("Slerp", &uquat::slerp);
 	defQuat->def("ToEulerAngles", Lua::Quaternion::ToEulerAngles);
@@ -1416,7 +1419,7 @@ void NetworkState::RegisterSharedLuaClasses(Lua::Interface &lua)
 	defQuat->def("ClampRotation", static_cast<Quat (*)(lua_State *, Quat &, const EulerAngles &, const EulerAngles &)>([](lua_State *l, Quat &rot, const EulerAngles &minBounds, const EulerAngles &maxBounds) -> Quat { return uquat::clamp_rotation(rot, minBounds, maxBounds); }));
 	defQuat->def("ClampRotation", static_cast<Quat (*)(lua_State *, Quat &, const EulerAngles &)>([](lua_State *l, Quat &rot, const EulerAngles &bounds) -> Quat { return uquat::clamp_rotation(rot, -bounds, bounds); }));
 	defQuat->def("Distance", &uquat::distance);
-	defQuat->def("GetConjugate", static_cast<Quat (*)(const Quat &)>(&glm::conjugate));
+	defQuat->def("GetConjugate", static_cast<Quat (*)(const Quat &)>(&glm::gtx::conjugate));
 	defQuat->def("AlignToAxis", &uquat::align_rotation_to_axis);
 	defQuat->def(
 	  "Equals", +[](const Quat &a, const Quat &b, float epsilon) { return umath::abs(a.x - b.x) <= epsilon && umath::abs(a.y - b.y) <= epsilon && umath::abs(a.z - b.z) <= epsilon && umath::abs(a.w - b.w) <= epsilon; });

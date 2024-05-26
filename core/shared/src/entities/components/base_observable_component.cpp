@@ -9,7 +9,8 @@
 #include "pragma/entities/components/base_observable_component.hpp"
 #include "pragma/entities/components/base_transform_component.hpp"
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

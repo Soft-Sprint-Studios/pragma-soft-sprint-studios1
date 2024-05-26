@@ -36,8 +36,9 @@
 #include "pragma/lua/sh_lua_component.hpp"
 #include "pragma/lua/policies/core_policies.hpp"
 #include "pragma/lua/types/udm.hpp"
-#include <udm.hpp>
 #include <sharedutils/magic_enum.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 

@@ -10,7 +10,6 @@
 
 #include "pragma/networkdefinitions.h"
 #include "pragma/entities/baseentity_handle.h"
-#include <udm_types.hpp>
 #include <sharedutils/util_pragma.hpp>
 #include <sharedutils/util_parallel_job.hpp>
 #include <sharedutils/util_ifile.hpp>
@@ -18,6 +17,8 @@
 #include <mathutil/vertex.hpp>
 #include <vector>
 #include <cinttypes>
+
+import udm;
 
 class NetworkState;
 class Game;

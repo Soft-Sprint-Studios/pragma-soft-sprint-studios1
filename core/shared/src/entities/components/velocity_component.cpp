@@ -14,7 +14,8 @@
 #include "pragma/lua/l_entity_handles.hpp"
 #include "pragma/lua/converters/game_type_converters_t.hpp"
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

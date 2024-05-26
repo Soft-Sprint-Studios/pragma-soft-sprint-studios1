@@ -22,7 +22,8 @@
 #include "pragma/model/animation/skeleton.hpp"
 #include "pragma/model/animation/bone.hpp"
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+
+import udm;
 
 #define DEBUG_VERBOSE_ANIMATION 0
 

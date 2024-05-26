@@ -11,7 +11,8 @@
 #include "pragma/entities/entity_uuid_ref.hpp"
 #include <sharedutils/util_uri.hpp>
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+
+import udm;
 
 static const auto ENTITY_DATA_VERSION = 1u;
 

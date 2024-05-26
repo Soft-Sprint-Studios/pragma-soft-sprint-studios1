@@ -9,7 +9,8 @@
 #define __FLEX_ANIMATION_HPP__
 
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
+
+import udm;
 
 using FlexControllerId = uint32_t;
 class DLLNETWORK FlexAnimationFrame : public std::enable_shared_from_this<FlexAnimationFrame> {

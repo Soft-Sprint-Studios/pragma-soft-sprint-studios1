@@ -18,7 +18,8 @@
 #include <sharedutils/datastream.h>
 #include <pragma/util/transform.h>
 #include <pragma/entities/baseentity_events.hpp>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

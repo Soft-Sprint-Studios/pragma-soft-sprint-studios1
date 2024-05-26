@@ -14,7 +14,8 @@
 #include <pragma/entities/entity_iterator.hpp>
 #include <sharedutils/util_hash.hpp>
 #include <unordered_set>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 
@@ -139,7 +140,7 @@ static void read_group(BaseEntity &ent, udm::LinkedPropertyWrapperArg udmGroup, 
 	}
 
 	auto udmChildren = udmGroup["children"];
-	for(auto &pair : udmChildren.ElIt()) {
+	for(auto &pair : udm::ElIt{udmChildren}) {
 		auto &udmChildGroup = pair.property;
 		read_group(ent, udmChildGroup, group.AddChildGroup(std::string {pair.key}));
 	}

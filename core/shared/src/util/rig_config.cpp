@@ -10,8 +10,10 @@
 #include <pragma/logging.hpp>
 #include <pragma/console/conout.h>
 #include <fsys/filesystem.h>
-#include <udm.hpp>
 #include <sharedutils/util_path.hpp>
+
+import udm;
+
 #pragma optimize("", off)
 const std::vector<std::string> &pragma::ik::RigConfig::get_supported_extensions()
 {

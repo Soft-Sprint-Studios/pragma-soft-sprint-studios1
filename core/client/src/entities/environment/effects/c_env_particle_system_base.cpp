@@ -30,7 +30,8 @@
 #include <pragma/entities/environment/effects/particlesystemdata.h>
 #include <pragma/util/util_game.hpp>
 #include <datasystem_vector.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

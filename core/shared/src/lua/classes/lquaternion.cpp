@@ -13,8 +13,8 @@
 #include "luasystem.h"
 #include "pragma/util/util_approach_rotation.hpp"
 #include "pragma/game/game_coordinate_system.hpp"
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/euler_angles.hpp>
+
+import glm;
 
 Quat Lua::Quaternion::Copy(lua_State *l, const Quat &rot) { return rot; }
 
@@ -23,43 +23,43 @@ EulerAngles Lua::Quaternion::ToEulerAngles(lua_State *l, Quat &q, uint32_t rotat
 	//EulerAngles ang(*q);
 	//luabind::object(l,ang).push(l);
 	EulerAngles ang {};
-	auto m = glm::mat4_cast(q);
+	Mat4 m {q};
 	switch(static_cast<pragma::RotationOrder>(rotationOrder)) {
 	case pragma::RotationOrder::XYZ:
-		glm::extractEulerAngleXYZ(m, ang.p, ang.y, ang.r);
+		glm::gtx::extractEulerAngleXYZ(m, ang.p, ang.y, ang.r);
 		break;
 	case pragma::RotationOrder::YXZ:
-		glm::extractEulerAngleYXZ(m, ang.y, ang.p, ang.r);
+		glm::gtx::extractEulerAngleYXZ(m, ang.y, ang.p, ang.r);
 		break;
 	case pragma::RotationOrder::XZX:
-		glm::extractEulerAngleXZX(m, ang.p, ang.r, ang.p);
+		glm::gtx::extractEulerAngleXZX(m, ang.p, ang.r, ang.p);
 		break;
 	case pragma::RotationOrder::XYX:
-		glm::extractEulerAngleXYX(m, ang.p, ang.y, ang.p);
+		glm::gtx::extractEulerAngleXYX(m, ang.p, ang.y, ang.p);
 		break;
 	case pragma::RotationOrder::YXY:
-		glm::extractEulerAngleYXY(m, ang.y, ang.p, ang.y);
+		glm::gtx::extractEulerAngleYXY(m, ang.y, ang.p, ang.y);
 		break;
 	case pragma::RotationOrder::YZY:
-		glm::extractEulerAngleYZY(m, ang.y, ang.r, ang.y);
+		glm::gtx::extractEulerAngleYZY(m, ang.y, ang.r, ang.y);
 		break;
 	case pragma::RotationOrder::ZYZ:
-		glm::extractEulerAngleZYZ(m, ang.r, ang.y, ang.r);
+		glm::gtx::extractEulerAngleZYZ(m, ang.r, ang.y, ang.r);
 		break;
 	case pragma::RotationOrder::ZXZ:
-		glm::extractEulerAngleZXZ(m, ang.r, ang.p, ang.r);
+		glm::gtx::extractEulerAngleZXZ(m, ang.r, ang.p, ang.r);
 		break;
 	case pragma::RotationOrder::XZY:
-		glm::extractEulerAngleXZY(m, ang.p, ang.r, ang.y);
+		glm::gtx::extractEulerAngleXZY(m, ang.p, ang.r, ang.y);
 		break;
 	case pragma::RotationOrder::YZX:
-		glm::extractEulerAngleYZX(m, ang.y, ang.r, ang.p);
+		glm::gtx::extractEulerAngleYZX(m, ang.y, ang.r, ang.p);
 		break;
 	case pragma::RotationOrder::ZYX:
-		glm::extractEulerAngleZYX(m, ang.r, ang.y, ang.p);
+		glm::gtx::extractEulerAngleZYX(m, ang.r, ang.y, ang.p);
 		break;
 	case pragma::RotationOrder::ZXY:
-		glm::extractEulerAngleZXY(m, ang.r, ang.p, ang.y);
+		glm::gtx::extractEulerAngleZXY(m, ang.r, ang.p, ang.y);
 		break;
 	}
 	ang.p = umath::rad_to_deg(ang.p);

@@ -16,7 +16,8 @@
 #include <luabind/copy_policy.hpp>
 #include <sharedutils/alpha_mode.hpp>
 #include <sharedutils/util_shaderinfo.hpp>
-#include <udm.hpp>
+
+import udm;
 
 void Lua::Material::register_class(luabind::class_<::Material> &classDef)
 {

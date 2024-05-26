@@ -9,7 +9,8 @@
 #include "pragma/model/animation/vertex_animation.hpp"
 #include "pragma/model/modelmesh.h"
 #include "pragma/model/model.h"
-#include <udm.hpp>
+
+import udm;
 
 MeshVertexFrame::MeshVertexFrame(const MeshVertexFrame &other) : std::enable_shared_from_this<MeshVertexFrame>(), m_vertices(other.m_vertices), m_normals {other.m_normals}, m_flags {other.m_flags}
 {

@@ -10,7 +10,8 @@
 #include "pragma/entities/entity_uuid_ref.hpp"
 #include <luabind/object.hpp>
 #include <sharedutils/util_path.hpp>
-#include <udm.hpp>
+
+import udm;
 
 namespace pragma {
 	struct DLLNETWORK ValueDriverDescriptor {

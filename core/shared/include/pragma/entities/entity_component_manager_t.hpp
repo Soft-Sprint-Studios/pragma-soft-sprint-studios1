@@ -12,7 +12,8 @@
 #include "pragma/entities/member_type.hpp"
 #include <panima/types.hpp>
 #include <sharedutils/util.h>
-#include <udm.hpp>
+
+import udm;
 
 class BaseEntity;
 namespace pragma {

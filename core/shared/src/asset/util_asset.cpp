@@ -13,7 +13,8 @@
 #include <material_manager2.hpp>
 #include <sharedutils/util_path.hpp>
 #include <fsys/ifile.hpp>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 

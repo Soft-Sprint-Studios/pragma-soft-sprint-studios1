@@ -12,7 +12,8 @@
 #include "pragma/entities/components/component_member_flags.hpp"
 #include "pragma/entities/attribute_specialization_type.hpp"
 #include "pragma/util/global_string_table.hpp"
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

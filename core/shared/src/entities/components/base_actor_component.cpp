@@ -20,7 +20,8 @@
 #include "pragma/entities/entity_component_system_t.hpp"
 #include "pragma/model/model.h"
 #include <pragma/physics/movetypes.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

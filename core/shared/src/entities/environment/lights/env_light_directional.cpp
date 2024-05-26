@@ -11,7 +11,8 @@
 #include "pragma/entities/baseentity_events.hpp"
 #include <sharedutils/util.h>
 #include <algorithm>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

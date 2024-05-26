@@ -11,7 +11,8 @@
 #include "pragma/asset/util_asset.hpp"
 #include <sharedutils/util_file.h>
 #include <pragma/entities/entity_component_system_t.hpp>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

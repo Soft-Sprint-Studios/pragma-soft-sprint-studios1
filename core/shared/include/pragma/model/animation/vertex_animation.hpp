@@ -9,9 +9,10 @@
 #define __VERTEX_ANIMATION_HPP__
 
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
 #include <mathutil/uvec.h>
 #include <memory>
+
+import udm;
 
 class DLLNETWORK MeshVertexFrame : public std::enable_shared_from_this<MeshVertexFrame> {
   public:

@@ -29,7 +29,8 @@
 #include <sharedutils/scope_guard.h>
 #include <sharedutils/datastream.h>
 #include <sharedutils/netpacket.hpp>
-#include <udm.hpp>
+
+import udm;
 
 #define ENABLE_CUSTOM_SETTER_GETTER 0
 

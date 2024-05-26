@@ -37,9 +37,10 @@
 #include <util_image.hpp>
 #include <cmaterialmanager.h>
 #include <cmaterial.h>
-#include <udm.hpp>
 #include <pragma/model/animation/skeleton.hpp>
 #include <pragma/model/animation/bone.hpp>
+
+import udm;
 
 extern DLLCLIENT CEngine *c_engine;
 extern DLLCLIENT ClientState *client;

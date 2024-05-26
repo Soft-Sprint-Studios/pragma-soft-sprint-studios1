@@ -9,7 +9,8 @@
 #include "pragma/game/savegame.hpp"
 #include "pragma/util/util_game.hpp"
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+
+import udm;
 
 using namespace pragma;
 

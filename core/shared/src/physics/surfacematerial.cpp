@@ -17,7 +17,8 @@
 #include <datasystem_vector.h>
 #include "pragma/ai/navsystem.h"
 #include <algorithm>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 

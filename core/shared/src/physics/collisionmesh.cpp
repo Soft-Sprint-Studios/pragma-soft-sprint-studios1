@@ -14,7 +14,8 @@
 #include "pragma/physics/environment.hpp"
 #include "pragma/model/modelmesh.h"
 #include "pragma/model/model.h"
-#include <udm.hpp>
+
+import udm;
 
 std::shared_ptr<CollisionMesh> CollisionMesh::Create(Game *game) { return std::shared_ptr<CollisionMesh>(new CollisionMesh(game)); }
 std::shared_ptr<CollisionMesh> CollisionMesh::Create(const CollisionMesh &other) { return std::shared_ptr<CollisionMesh>(new CollisionMesh(other)); }

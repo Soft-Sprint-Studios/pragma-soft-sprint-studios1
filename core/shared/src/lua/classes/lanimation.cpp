@@ -17,7 +17,8 @@
 #include "pragma/model/animation/skeleton.hpp"
 #include "pragma/model/animation/bone.hpp"
 #include <fsys/ifile.hpp>
-#include <udm.hpp>
+
+import udm;
 
 void Lua::Animation::Load(lua_State *l, LFile &f)
 {

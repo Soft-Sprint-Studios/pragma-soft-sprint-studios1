@@ -11,7 +11,8 @@
 #include "pragma/audio/soundscript_events.h"
 #include "pragma/audio/alsound_type.h"
 #include <sharedutils/util_string.h>
-#include <udm.hpp>
+
+import udm;
 
 #undef CreateEvent
 

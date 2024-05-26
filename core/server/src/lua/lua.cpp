@@ -41,7 +41,8 @@
 #include <pragma/model/model.h>
 #include <pragma/networking/nwm_util.h>
 #include <luainterface.hpp>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLSERVER ServerState *server;
 

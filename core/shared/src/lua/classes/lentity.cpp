@@ -58,7 +58,8 @@
 #include <luabind/copy_policy.hpp>
 #include <sharedutils/datastream.h>
 #include <pragma/physics/movetypes.h>
-#include <udm.hpp>
+
+import udm;
 
 extern DLLNETWORK Engine *engine;
 

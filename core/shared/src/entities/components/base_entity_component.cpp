@@ -14,7 +14,9 @@
 #include "pragma/entities/entity_component_system_t.hpp"
 #include "pragma/logging.hpp"
 #include <sharedutils/datastream.h>
-#include <udm.hpp>
+#include <sharedutils/magic_enum.hpp>
+
+import udm;
 
 using namespace pragma;
 

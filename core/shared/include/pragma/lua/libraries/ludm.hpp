@@ -10,7 +10,8 @@
 
 #include "pragma/networkdefinitions.h"
 #include "pragma/lua/types/udm.hpp"
-#include <udm_types.hpp>
+
+import udm;
 
 namespace udm {
 	struct Array;

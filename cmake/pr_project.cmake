@@ -1,7 +1,9 @@
 function(pr_setup_default_project_settings TARGET_NAME)
-	if(WIN32)
+	if(MSVC)
 		target_compile_options(${TARGET_NAME} PRIVATE /wd4251)
 		target_compile_options(${TARGET_NAME} PRIVATE /wd4996)
+
+		target_compile_options(${TARGET_NAME} PRIVATE /bigobj)
 	endif()
 
 	if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

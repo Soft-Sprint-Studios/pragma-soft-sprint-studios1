@@ -24,9 +24,10 @@
 #include <sharedutils/netpacket.hpp>
 #include <pragma/physics/movetypes.h>
 #include <pragma/physics/collisiontypes.h>
-#include <udm.hpp>
 #include "pragma/model/animation/bone.hpp"
 #include "pragma/model/animation/skeleton.hpp"
+
+import udm;
 
 using namespace pragma;
 

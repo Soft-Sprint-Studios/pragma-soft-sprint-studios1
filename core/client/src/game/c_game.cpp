@@ -111,8 +111,9 @@
 #include <shader/prosper_pipeline_loader.hpp>
 #include <util_image.hpp>
 #include <util_image_buffer.hpp>
-#include <udm.hpp>
 #include <prosper_window.hpp>
+
+import udm;
 
 extern EntityClassMap<CBaseEntity> *g_ClientEntityFactories;
 extern ClientEntityNetworkMap *g_ClEntityNetworkMap;

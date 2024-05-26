@@ -8,11 +8,13 @@
 #define __PARTICLESYSTEMDATA_H__
 
 #include "pragma/networkdefinitions.h"
-#include <udm_types.hpp>
+#include <fsys/vfileptr.h>
 #include <unordered_map>
 #include <string>
 #include <vector>
 #include <memory>
+
+import udm;
 
 struct DLLNETWORK CParticleModifierData {
 	CParticleModifierData(std::string pName) : name(pName) {}
