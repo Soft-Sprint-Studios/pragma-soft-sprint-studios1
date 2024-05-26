@@ -17,8 +17,7 @@ function(pr_add_module_reference TARGET_NAME IDENTIFIER)
 
 		message("[PR] Adding module reference \"${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE}\" (${NORMALIZED_IDENTIFIER}) to target ${TARGET_NAME}")
         # Note: There must *not* be a space between "/reference" and the path, otherwise only one /reference will be recoginized.
-        #target_compile_options(${PROJ_NAME} ${VISIBILITY} /reference${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE})
-        target_compile_options(${PROJ_NAME} ${VISIBILITY} $<$<BOOL:${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE}>:/reference${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE}>)
+        target_compile_options(${PROJ_NAME} ${VISIBILITY} /reference${DEPENDENCY_${NORMALIZED_IDENTIFIER}_MODULE})
 	endif()
 endfunction()
 
