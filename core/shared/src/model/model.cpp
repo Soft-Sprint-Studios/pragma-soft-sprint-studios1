@@ -26,6 +26,7 @@
 #include <sharedutils/util_path.hpp>
 #include <sharedutils/util_file.h>
 #include <sharedutils/util_library.hpp>
+#include <sharedutils/util_ifile.hpp>
 #include <stack>
 
 extern DLLNETWORK Engine *engine;
@@ -334,8 +335,8 @@ void Model::GenerateBindPoseMatrices()
 		auto &pos = *m_reference->GetBonePosition(i);
 		auto &rot = *m_reference->GetBoneOrientation(i);
 
-		auto m = glm::toMat4(rot);
-		m = glm::translate(m, pos);
+		auto m = Mat4 {rot};
+		m = glm::gtx::translate(m, pos);
 		SetBindPoseBoneMatrix(i, m);
 	}
 }

@@ -43,7 +43,7 @@ bool SurfaceMaterialManager::Load(const std::string &path)
 		return false;
 	auto &data = *udmData;
 	auto udm = data.GetAssetData().GetData();
-	for(auto pair : udm.ElIt()) {
+	for(auto pair : udm::ElIt{udm}) {
 		auto &identifier = pair.key;
 		auto &physMat = Create(std::string {identifier});
 		physMat.Load(pair.property);

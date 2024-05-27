@@ -11,6 +11,8 @@
 #include <mathutil/uvec.h>
 #include <pragma/math/intersection.h>
 #include "pragma/math/icosphere.h"
+#include <sharedutils/util_ifile.hpp>
+#include <sharedutils/magic_enum.hpp>
 
 import udm;
 
@@ -1054,7 +1056,7 @@ bool ModelSubMesh::LoadFromAssetData(const udm::AssetData &data, std::string &ou
 	auto udmUvSets = udm["uvSets"];
 	auto &uvSets = GetUVSets();
 	uvSets.reserve(udmUvSets.GetSize());
-	for(auto udmUvSet : udmUvSets.ElIt()) {
+	for(auto udmUvSet : udm::ElIt {udmUvSets}) {
 		std::vector<Vector2> uvData {};
 		udmUvSet.property(uvData);
 		uvSets[std::string {udmUvSet.key}] = std::move(uvData);

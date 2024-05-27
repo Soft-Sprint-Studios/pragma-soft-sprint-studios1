@@ -197,7 +197,7 @@ luabind::object Lua::udm::udm_to_value(lua_State *l, ::udm::LinkedPropertyWrappe
 	}
 	else if(type == ::udm::Type::Element) {
 		auto t = luabind::newtable(l);
-		for(auto &pair : const_cast<::udm::LinkedPropertyWrapper &>(udm).ElIt())
+		for(auto &pair : ::udm::ElIt {const_cast<::udm::LinkedPropertyWrapper &>(udm)})
 			t[pair.key] = udm_to_value(l, pair.property);
 		return t;
 	}

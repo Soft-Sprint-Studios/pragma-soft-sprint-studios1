@@ -332,10 +332,10 @@ std::pair<Vector3, Vector3> Frame::CalcRenderBounds(const pragma::animation::Ani
 		auto &mat = boneMatrices[i];
 		auto &pos = *t->GetBonePosition(static_cast<uint32_t>(i));
 		auto rot = *t->GetBoneOrientation(static_cast<uint32_t>(i)) * glm::inverse(*rotBind);
-		mat = glm::translate(mat, *posBind);
-		mat = mat * glm::toMat4(rot);
-		mat = glm::translate(mat, -(*posBind));
-		mat = glm::translate(pos - (*posBind)) * mat;
+		mat = glm::gtx::translate(mat, *posBind);
+		mat = mat * Mat4 {rot};
+		mat = glm::gtx::translate(mat, -(*posBind));
+		mat = glm::gtx::translate(pos - (*posBind)) * mat;
 	}
 	std::pair<Vector3, Vector3> renderBounds = {{std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max()}, {std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest()}};
 	for(auto &meshGroup : mdl.GetMeshGroups()) {

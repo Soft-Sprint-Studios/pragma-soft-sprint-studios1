@@ -11,6 +11,7 @@
 #include <pragma/console/conout.h>
 #include <fsys/filesystem.h>
 #include <sharedutils/util_path.hpp>
+#include <sharedutils/magic_enum.hpp>
 
 import udm;
 

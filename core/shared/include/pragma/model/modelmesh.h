@@ -14,6 +14,7 @@
 #include "pragma/model/modelupdateflags.hpp"
 #include <unordered_map>
 #include <mathutil/transform.hpp>
+#include <optional>
 
 import udm;
 
@@ -34,6 +35,7 @@ namespace util {
 namespace pragma::model {
 	enum class IndexType : uint8_t { UInt16 = 0u, UInt32 };
 };
+class Game;
 class DLLNETWORK ModelSubMesh : public std::enable_shared_from_this<ModelSubMesh> {
   public:
 	static constexpr auto PMESH_IDENTIFIER = "PMESH";
@@ -253,6 +255,7 @@ class DLLNETWORK ModelMesh : public std::enable_shared_from_this<ModelMesh> {
 DLLNETWORK std::ostream &operator<<(std::ostream &out, const ModelSubMesh &o);
 DLLNETWORK std::ostream &operator<<(std::ostream &out, const ModelMesh &o);
 
+class Game;
 namespace pragma::model {
 	struct DLLNETWORK QuadCreateInfo {
 		QuadCreateInfo() = default;

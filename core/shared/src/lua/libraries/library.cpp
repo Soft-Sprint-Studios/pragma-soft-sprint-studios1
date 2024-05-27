@@ -242,8 +242,10 @@ bool Lua::util::start_debugger_server(lua_State *l)
 	return engine->GetNetworkState(l)->GetGameState()->ExecuteLuaFile(fileName);
 }
 
+#ifdef __linux__
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(util, HSV);
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(std, match_results<const char *>);
+#endif
 
 static std::vector<bezierfit::VECTOR> reduce(std::vector<bezierfit::VECTOR> points) { return bezierfit::reduce(points); }
 
@@ -1700,7 +1702,7 @@ void Game::RegisterLuaLibraries()
 
 	auto modMat = luabind::module_(GetLuaState(), "matrix");
 	modMat[luabind::def("create_from_axis_angle", umat::create_from_axis_angle), luabind::def("create_from_axes", umat::create_from_axes), luabind::def("create_reflection", umat::create_reflection), luabind::def("create_orthogonal_matrix", Lua::matrix::create_orthogonal_matrix),
-	  luabind::def("create_perspective_matrix", Lua::matrix::create_perspective_matrix), luabind::def("create_look_at_matrix", glm::lookAtRH<float, glm::packed_highp>),
+	  luabind::def("create_perspective_matrix", Lua::matrix::create_perspective_matrix), luabind::def("create_look_at_matrix", glm::gtx::lookAtRH<float, glm::packed_highp>),
 	  luabind::def("calc_covariance_matrix", static_cast<::Mat3 (*)(lua_State *, luabind::table<>, const Vector3 &)>(Lua::matrix::calc_covariance_matrix)), luabind::def("calc_covariance_matrix", static_cast<::Mat3 (*)(lua_State *, luabind::table<>)>(Lua::matrix::calc_covariance_matrix)),
 	  luabind::def("calc_covariance_matrix", static_cast<::Mat3 (*)(lua_State *, luabind::table<>)>(Lua::matrix::calc_covariance_matrix)), luabind::def("calc_projection_depth_bias_offset", &umat::calc_projection_depth_bias_offset)];
 

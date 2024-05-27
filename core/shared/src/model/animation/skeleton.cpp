@@ -174,7 +174,7 @@ bool pragma::animation::Skeleton::LoadFromAssetData(const udm::AssetData &data, 
 
 		auto udmChildren = udmBone["children"];
 		boneInfo.childIds.reserve(udmChildren.GetChildCount());
-		for(auto udmChild : udmChildren.ElIt()) {
+		for(auto udmChild : udm::ElIt {udmChildren}) {
 			auto childBoneIdx = readBone(udmChild.property, udmChild.key);
 			udmBoneList[i].childIds.push_back(childBoneIdx);
 		}
@@ -183,7 +183,7 @@ bool pragma::animation::Skeleton::LoadFromAssetData(const udm::AssetData &data, 
 	auto udmBones = udm["bones"];
 	std::vector<pragma::animation::BoneId> rootBoneIndices {};
 	rootBoneIndices.reserve(udmBones.GetChildCount());
-	for(auto udmBone : udmBones.ElIt())
+	for(auto udmBone : udm::ElIt {udmBones})
 		rootBoneIndices.push_back(readBone(udmBone.property, udmBone.key));
 
 	auto &bones = GetBones();

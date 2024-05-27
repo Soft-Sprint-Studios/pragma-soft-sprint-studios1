@@ -112,7 +112,7 @@ static Vector3 apply_curvature(const Vector3 &baseHairDir, const Vector3 &surfac
 	if(uvec::distance(baseHairDir, surfaceTargetNormal) < 0.001f)
 		return baseHairDir;
 	auto f = factor * curvature;
-	auto n = glm::slerp(baseHairDir, surfaceTargetNormal, f);
+	auto n = glm::gtx::slerp(baseHairDir, surfaceTargetNormal, f);
 	uvec::normalize(&n); // Probably not needed
 	return n;
 }
@@ -563,11 +563,13 @@ static Lua::mult<bool, Lua::opt<std::string>> exec_python(lua_State *l, const st
 	return luabind::object {l, res};
 }
 static Lua::mult<bool, Lua::opt<std::string>> exec_python(lua_State *l, const std::string &fileName) { return exec_python(l, fileName, {}); }
+#ifdef __linux__
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(pragma::rendering, pragma::rendering::Tile);
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(pragma::ik, pragma::ik::RigConfig);
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(pragma::ik, pragma::ik::RigConfigBone);
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(pragma::ik, pragma::ik::RigConfigControl);
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(pragma::ik, pragma::ik::RigConfigConstraint);
+#endif
 void Lua::util::register_library(lua_State *l)
 {
 	auto pythonMod = luabind::module(l, "python");

@@ -18,10 +18,10 @@ const Quat &Transform::GetOrientation() const { return m_orientation; }
 const Mat4 &Transform::GetTransformationMatrix() const { return m_transform; }
 void Transform::UpdateMatrix()
 {
-	m_transform = glm::translate(m_transform, m_pos);
-	m_transform = m_transform * glm::toMat4(m_orientation);
+	m_transform = glm::gtx::translate(m_transform, m_pos);
+	m_transform = m_transform * Mat4 {m_orientation};
 	if(m_scale.x != 1.f || m_scale.y != 1.f || m_scale.z != 1.f)
-		m_transform = glm::scale(m_transform, m_scale);
+		m_transform = glm::gtx::scale(m_transform, m_scale);
 }
 void Transform::SetScale(const Vector3 &scale) { m_scale = scale; }
 void Transform::SetPosition(const Vector3 &pos) { m_pos = pos; }

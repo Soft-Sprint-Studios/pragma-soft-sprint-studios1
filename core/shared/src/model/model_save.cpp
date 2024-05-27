@@ -19,6 +19,7 @@
 #include "pragma/logging.hpp"
 #include <fsys/filesystem.h>
 #include <sharedutils/util_file.h>
+#include <sharedutils/util_ifile.hpp>
 #include "pragma/model/animation/skeleton.hpp"
 #include "pragma/model/animation/bone.hpp"
 
@@ -411,7 +412,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 	auto numBodyGroups = udmBodyGroups.GetChildCount();
 	bodyGroups.resize(numBodyGroups);
 	uint32_t idx = 0;
-	for(auto udmBodyGroup : udmBodyGroups.ElIt()) {
+	for(auto udmBodyGroup : udm::ElIt {udmBodyGroups}) {
 		auto &bg = bodyGroups[idx++];
 		bg.name = udmBodyGroup.key;
 		udmBodyGroup.property["meshGroups"](bg.meshGroups);
@@ -463,7 +464,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 	auto &meshGroups = GetMeshGroups();
 	auto udmMeshGroups = udm["meshGroups"];
 	meshGroups.resize(udmMeshGroups.GetChildCount());
-	for(auto udmMeshGroup : udmMeshGroups.ElIt()) {
+	for(auto udmMeshGroup : udm::ElIt {udmMeshGroups}) {
 		auto meshGroup = ModelMeshGroup::Create(std::string {udmMeshGroup.key});
 		uint32_t groupIdx = 0;
 		udmMeshGroup.property["index"](groupIdx);
@@ -508,7 +509,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto udmAnimations = udm["animations"];
 		auto numExpected = udmAnimations.GetChildCount();
 		animations.resize(udmAnimations.GetChildCount());
-		for(auto udmAnimation : udmAnimations.ElIt()) {
+		for(auto udmAnimation : udm::ElIt {udmAnimations}) {
 			auto anim = pragma::animation::Animation::Load(udm::AssetData {udmAnimation.property}, outErr, &skeleton, &reference);
 			if(anim == nullptr) {
 				outErr = "Failed to load animation " + std::string {udmAnimation.key} + ": " + outErr;
@@ -571,7 +572,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto udmMorphTargetAnims = udm["morphTargetAnimations"];
 		auto numMorphTargetAnims = udmMorphTargetAnims.GetChildCount();
 		morphAnims.resize(numMorphTargetAnims);
-		for(auto udmMorphTargetAnim : udmMorphTargetAnims.ElIt()) {
+		for(auto udmMorphTargetAnim : udm::ElIt {udmMorphTargetAnims}) {
 			udmMorphTargetAnim.property["index"](idx);
 			morphAnims[idx] = VertexAnimation::Load(*this, udm::AssetData {udmMorphTargetAnim.property}, outErr);
 			if(morphAnims[idx] == nullptr) {
@@ -584,7 +585,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto &flexes = GetFlexes();
 		auto udmFlexes = udm["flexes"];
 		flexes.resize(udmFlexes.GetChildCount());
-		for(auto udmFlex : udmFlexes.ElIt()) {
+		for(auto udmFlex : udm::ElIt {udmFlexes}) {
 			udmFlex.property["index"](idx);
 			if(idx >= flexes.size()) {
 				// outErr = "Flex index " + std::to_string(idx) + " out of range! (Number of flexes: " + std::to_string(flexes.size()) + ")";
@@ -621,7 +622,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto udmFlexControllers = udm["flexControllers"];
 		auto numFlexControllers = udmFlexControllers.GetChildCount();
 		flexControllers.resize(numFlexControllers);
-		for(auto udmFlexController : udmFlexControllers.ElIt()) {
+		for(auto udmFlexController : udm::ElIt {udmFlexControllers}) {
 			udmFlexController.property["index"](idx);
 			auto &flexC = flexControllers[idx];
 			flexC.name = udmFlexController.key;
@@ -633,7 +634,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto udmEyeballs = udm["eyeballs"];
 		auto numEyeballs = udmEyeballs.GetChildCount();
 		eyeballs.resize(numEyeballs);
-		for(auto udmEyeball : udmEyeballs.ElIt()) {
+		for(auto udmEyeball : udm::ElIt {udmEyeballs}) {
 			udmEyeball.property["index"](idx);
 			auto &eyeball = eyeballs[idx];
 			eyeball.name = udmEyeball.key;
@@ -668,7 +669,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto &phonemeMap = GetPhonemeMap();
 		auto udmPhonemes = udm["phonemes"];
 		phonemeMap.phonemes.reserve(udmPhonemes.GetChildCount());
-		for(auto udmPhoneme : udmPhonemes.ElIt()) {
+		for(auto udmPhoneme : udm::ElIt {udmPhonemes}) {
 			auto &phonemeInfo = phonemeMap.phonemes[std::string {udmPhoneme.key}] = {};
 			udmPhoneme.property(phonemeInfo.flexControllers);
 		}
@@ -679,7 +680,7 @@ bool Model::LoadFromAssetData(Game &game, const udm::AssetData &data, std::strin
 		auto numFlexAnims = udmFlexAnims.GetChildCount();
 		flexAnims.resize(numFlexAnims);
 		flexAnimNames.resize(numFlexAnims);
-		for(auto udmFlexAnim : udmFlexAnims.ElIt()) {
+		for(auto udmFlexAnim : udm::ElIt {udmFlexAnims}) {
 			udmFlexAnim.property["index"](idx);
 			flexAnimNames[idx] = udmFlexAnim.key;
 			flexAnims[idx] = FlexAnimation::Load(udm::AssetData {udmFlexAnim.property}, outErr);
