@@ -38,8 +38,8 @@
 #include <pragma/entities/components/basetoggle.h>
 #include <pragma/entities/entity_component_system_t.hpp>
 #include <pragma/lua/converters/game_type_converters_t.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/euler_angles.hpp>
+
+import glm;
 
 using namespace pragma;
 
@@ -377,7 +377,7 @@ void CPlayerComponent::OnUpdateMatrices(Mat4 &transformMatrix)
 	if(IsLocalPlayer() && IsInFirstPersonMode()) {
 		auto pTrComponent = GetEntity().GetTransformComponent();
 		auto t = (pTrComponent != nullptr ? pTrComponent->GetForward() : uvec::FORWARD) * VIEW_BODY_OFFSET;
-		transformMatrix = glm::translate(umat::identity(), t) * transformMatrix; // Translate to align shadow with view body
+		transformMatrix = glm::gtx::translate(umat::identity(), t) * transformMatrix; // Translate to align shadow with view body
 	}
 }
 
@@ -631,7 +631,7 @@ void CPlayerComponent::OnSetCharacterOrientation(const Vector3 &up)
 	// to euler angles
 	auto m = glm::mat4_cast(rotDst);
 	EulerAngles ang;
-	glm::extractEulerAngleYXZ(m, ang.y, ang.p, ang.r);
+	glm::gtx::extractEulerAngleYXZ(m, ang.y, ang.p, ang.r);
 	ang.p = umath::rad_to_deg(ang.p);
 	ang.y = umath::rad_to_deg(ang.y);
 	ang.r = umath::rad_to_deg(ang.r);
@@ -639,8 +639,8 @@ void CPlayerComponent::OnSetCharacterOrientation(const Vector3 &up)
 
 	auto fToQuat = [](const EulerAngles &ang) {
 		auto m = umat::identity();
-		m = glm::eulerAngleYXZ(umath::deg_to_rad(ang.y), umath::deg_to_rad(ang.p), umath::deg_to_rad(ang.r));
-		auto q = glm::quat_cast(m);
+		m = glm::gtx::eulerAngleYXZ(umath::deg_to_rad(ang.y), umath::deg_to_rad(ang.p), umath::deg_to_rad(ang.r));
+		auto q = Quat {m};
 		return q;
 	};
 

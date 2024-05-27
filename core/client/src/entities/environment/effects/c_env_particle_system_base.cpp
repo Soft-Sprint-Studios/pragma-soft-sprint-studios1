@@ -24,14 +24,13 @@
 #include <prosper_util.hpp>
 #include <prosper_descriptor_set_group.hpp>
 #include <sharedutils/util_file.h>
-#include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/norm.hpp>
 #include <pragma/entities/entity_component_system_t.hpp>
 #include <pragma/entities/environment/effects/particlesystemdata.h>
 #include <pragma/util/util_game.hpp>
 #include <datasystem_vector.h>
 
 import udm;
+import glm;
 
 using namespace pragma;
 
@@ -146,7 +145,7 @@ std::optional<ParticleSystemFileHeader> CParticleSystemComponent::ReadHeader(VFi
 			auto assetData = data->GetAssetData().GetData()["particleSystemDefinitions"];
 			if(assetData) {
 				ParticleSystemFileHeader header {};
-				for(auto udmDef : assetData.ElIt())
+				for(auto udmDef : udm::ElIt {assetData})
 					header.particleSystemNames.push_back(std::string {udmDef.key});
 				header.numParticles = header.particleSystemNames.size();
 				return header;
@@ -237,7 +236,7 @@ bool CParticleSystemComponent::Precache(std::string fname, bool bReload)
 	ptSystemNames.reserve(numParticles);
 	s_particleData.reserve(s_particleData.size() + numParticles);
 	uint32_t idx = 0;
-	for(auto udmDef : udmParticleSystemDefinitions.ElIt()) {
+	for(auto udmDef : udm::ElIt {udmParticleSystemDefinitions}) {
 		auto name = std::string {udmDef.key};
 		ptSystemNames.push_back(name);
 		auto data = std::make_unique<CParticleSystemData>();
@@ -1550,7 +1549,7 @@ void CParticleSystemComponent::Simulate(double tDelta)
 			if(uvec::length_sqr(velAng) > 0.f) {
 				// Update world rotation
 				auto rotOld = p.GetWorldRotation();
-				auto rotNew = glm::quat_cast(glm::eulerAngleYXZ(velAng.y, velAng.x, velAng.z)) * rotOld;
+				auto rotNew = glm::gtx::quat_cast(glm::gtx::eulerAngleYXZ(velAng.y, velAng.x, velAng.z)) * rotOld;
 				p.SetWorldRotation(rotNew);
 				if(rotOld.w != rotNew.w || rotOld.x != rotNew.x || rotOld.y != rotNew.y || rotOld.z != rotNew.z)
 					umath::set_flag(m_flags, Flags::HasMovingParticles, true);
@@ -1572,7 +1571,7 @@ void CParticleSystemComponent::Simulate(double tDelta)
 				if(umath::is_flag_set(m_flags, Flags::HasMovingParticles) == false && uvec::length_sqr(velEffective) > 0.f)
 					umath::set_flag(m_flags, Flags::HasMovingParticles, true);
 			}
-			p.SetCameraDistance(glm::length2(pos - posCam));
+			p.SetCameraDistance(glm::gtx::length2(pos - posCam));
 			for(auto &op : m_operators)
 				op->PostSimulate(p, tDelta);
 			//numRender++;

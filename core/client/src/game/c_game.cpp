@@ -1649,7 +1649,7 @@ bool CGame::LoadAuxEffects(const std::string &fname)
 	auto udm = data.GetAssetData().GetData();
 	if(!udm)
 		return false;
-	for(auto pair : udm.ElIt()) {
+	for(auto pair : udm::ElIt {udm}) {
 		std::string name = std::string {pair.key};
 		StringToLower(name);
 		std::string type;

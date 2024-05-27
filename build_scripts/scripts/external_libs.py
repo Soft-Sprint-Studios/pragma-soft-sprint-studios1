@@ -18,7 +18,7 @@ get_submodule("networkmanager","https://github.com/Silverlan/networkmanager.git"
 get_submodule("panima","https://github.com/Silverlan/panima.git","a4cb0b5c961d7548e0a8f9f2729ce0fbefc121c1","feat/cxx_modules")
 get_submodule("prosper","https://github.com/Silverlan/prosper.git","d8794054bcab5c527840439fcf70c46e4db63d52","feat/cxx_modules")
 get_submodule("sharedutils","https://github.com/Silverlan/sharedutils.git","eb34bd98f572e642885769914299240fab1b8982","feat/cxx_modules")
-get_submodule("util_bsp","https://github.com/Silverlan/util_bsp.git","cf0875a0b1d7c297660cd5529641dc4e97a2cc86","feat/cxx_modules")
+get_submodule("util_bsp","https://github.com/Silverlan/util_bsp.git","165cb693fb5e249d604b05399e324f1dba3d062c","feat/cxx_modules")
 get_submodule("util_formatted_text","https://github.com/Silverlan/util_formatted_text.git","f53cfef4381c4d55b48b14257598a19f87fc736f","feat/cxx_modules")
 get_submodule("util_image","https://github.com/Silverlan/util_image.git","43341428237d88195a06136da6887b6830105b09","feat/cxx_modules")
 get_submodule("util_pad","https://github.com/Silverlan/util_pad.git","938f5a7164ae46ec9287cebcc47a98227737623f","feat/cxx_modules")
@@ -33,7 +33,7 @@ get_submodule("util_versioned_archive","https://github.com/Silverlan/util_versio
 get_submodule("util_vmf","https://github.com/Silverlan/util_vmf.git","cd97e47cbfdc4fc65e52bc6cd172ffcc6bd850c3","feat/cxx_modules")
 get_submodule("util_zip","https://github.com/Silverlan/util_zip.git","fef8bb16b34f3644f3354506578cbc2ed2338533","feat/cxx_modules")
 get_submodule("vfilesystem","https://github.com/Silverlan/vfilesystem.git","a233c7f5d44dc3e39d7de6765bff0efe4c09122b","feat/cxx_modules")
-get_submodule("wgui","https://github.com/Silverlan/wgui.git","ec346af89895860e0603cc1855f04d81dbe822b7","feat/cxx_modules")
+get_submodule("wgui","https://github.com/Silverlan/wgui.git","b1923ab256e4202e3ef2d98885ebdcc062c53417","feat/cxx_modules")
 get_submodule("util_unicode","https://github.com/Silverlan/util_unicode.git","09267d38c8485976de299eb3e8bf46eb0ad3bb5f","feat/cxx_modules")
 get_submodule("cppbezierfit","https://github.com/Silverlan/cppbezierfit.git","8c0d5a58e8d8072b82bb08d0a593480ba1539fb2","feat/cxx_modules")
 

@@ -76,10 +76,6 @@
 
 import udm;
 
-extern "C" {
-#include "bzlib.h"
-}
-
 extern DLLNETWORK Engine *engine;
 extern EntityClassMap<SBaseEntity> *g_ServerEntityFactories;
 extern ServerEntityNetworkMap *g_SvEntityNetworkMap;
@@ -657,7 +653,8 @@ void SGame::ReceiveUserInfo(pragma::networking::IServerClient &session, NetPacke
 	packetInf->Write<uint32_t>(numTypes, &offsetTypes);
 	//
 
-	CacheInfo *cache = GetLuaCacheInfo();
+	// TODO: Is this obsolete?
+	CacheInfo *cache = nullptr; // GetLuaCacheInfo();
 	if(cache == NULL || cache->size == 0)
 		packetInf->Write<unsigned int>((unsigned int)(0));
 	else {

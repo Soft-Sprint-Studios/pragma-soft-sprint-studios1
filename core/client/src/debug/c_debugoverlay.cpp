@@ -100,7 +100,7 @@ bool DebugRenderer::BaseObject::IsVisible() const { return umath::is_flag_set(m_
 void DebugRenderer::BaseObject::SetVisible(bool b) { umath::set_flag(m_flags, Flags::Visible, b); }
 bool DebugRenderer::BaseObject::ShouldIgnoreDepth() const { return umath::is_flag_set(m_flags, Flags::IgnoreDepth); }
 void DebugRenderer::BaseObject::SetIgnoreDepth(bool b) { umath::set_flag(m_flags, Flags::IgnoreDepth, b); }
-void DebugRenderer::BaseObject::UpdateModelMatrix() { m_modelMatrix = m_pose.::umath::Transform::ToMatrix() * glm::scale(glm::mat4 {1.f}, GetScale()); }
+void DebugRenderer::BaseObject::UpdateModelMatrix() { m_modelMatrix = m_pose.::umath::Transform::ToMatrix() * glm::gtx::scale(glm::mat4 {1.f}, GetScale()); }
 
 ///////////////////////////
 
@@ -366,9 +366,9 @@ static std::shared_ptr<DebugRenderer::BaseObject> draw_text(WIText *el, const Ve
 		auto m = umat::identity();
 		const Vector2 scale {2.f, 2.f};
 		const Vector3 matScale {-scale.x, -scale.y, -1.f};
-		m = glm::scale(m, matScale);
+		m = glm::gtx::scale(m, matScale);
 		m = ptrO->GetModelMatrix() * m;
-		m = glm::scale(m, Vector3 {szUnits.x, szUnits.y, 1.f});
+		m = glm::gtx::scale(m, Vector3 {szUnits.x, szUnits.y, 1.f});
 		m = cam->GetProjectionMatrix() * cam->GetViewMatrix() * m;
 
 		auto *ds = ptrO->GetTextDescriptorSet();

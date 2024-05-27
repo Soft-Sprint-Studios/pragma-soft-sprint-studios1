@@ -31,10 +31,11 @@ bool InputBindingLayer::Save(const std::vector<std::shared_ptr<InputBindingLayer
 }
 bool InputBindingLayer::Load(const udm::AssetData &data, std::vector<std::shared_ptr<InputBindingLayer>> &outLayers, std::string &outErr)
 {
-	for(auto &pair : data.GetData().ElIt()) {
+	auto udmData = data.GetData();
+	for(auto &pair : udm::ElIt {udmData}) {
 		auto layer = std::make_shared<InputBindingLayer>();
 		layer->identifier = pair.key;
-		for(auto &pair : pair.property.ElIt()) {
+		for(auto &pair : udm::ElIt {pair.property}) {
 			auto val = pair.property.ToValue<udm::String>();
 			if(!val.has_value())
 				continue;

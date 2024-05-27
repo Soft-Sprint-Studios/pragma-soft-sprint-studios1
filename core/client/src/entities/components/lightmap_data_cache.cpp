@@ -109,14 +109,14 @@ bool LightmapDataCache::LoadFromAssetData(const udm::AssetData &data, std::strin
 
 	auto udmCacheData = udm["cacheData"];
 	cacheData.reserve(udmCacheData.GetChildCount());
-	for(auto &pair : udmCacheData.ElIt()) {
+	for(auto &pair : udm::ElIt {udmCacheData}) {
 		InstanceCacheData instanceData {};
 		pair.property["model"](instanceData.model);
 		pair.property["pose"](instanceData.pose);
 
 		auto udmMeshData = pair.property["meshData"];
 		instanceData.meshData.reserve(udmMeshData.GetChildCount());
-		for(auto &pair : udmMeshData.ElIt()) {
+		for(auto &pair : udm::ElIt {udmMeshData}) {
 			auto udmMesh = pair.property;
 			MeshCacheData meshData {};
 			udmMesh["lightmapUvs"](meshData.uvs);

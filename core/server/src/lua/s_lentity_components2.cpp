@@ -63,8 +63,9 @@
 
 #include <pragma/lua/ostream_operator_alias.hpp>
 
+#ifdef __linux__
 DEFINE_OSTREAM_OPERATOR_NAMESPACE_ALIAS(pragma, BaseEntityComponent);
-
+#endif
 void RegisterLuaEntityComponents2_sv(lua_State *l, luabind::module_ &entsMod)
 {
 	auto defSPointConstraintBallSocket = pragma::lua::create_entity_component_class<pragma::SPointConstraintBallSocketComponent, pragma::BasePointConstraintBallSocketComponent>("PointConstraintBallSocketComponent");
