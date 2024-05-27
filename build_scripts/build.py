@@ -758,8 +758,9 @@ if with_essential_client_modules:
 if with_common_modules:
 	add_pragma_module(
 		name="pr_bullet",
-		commitSha="4eb3df9",
-		repositoryUrl="https://github.com/Silverlan/pr_bullet.git"
+		commitSha="de0c2b7751af503540b0da789dfed5c162e736ef",
+		repositoryUrl="https://github.com/Silverlan/pr_bullet.git",
+		branch="feat/cxx_modules"
 	)
 	add_pragma_module(
 		name="pr_audio_soloud",
