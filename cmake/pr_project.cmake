@@ -35,5 +35,15 @@ function(pr_add_executable TARGET_NAME)
 endfunction()
 
 function(pr_finalize TARGET_NAME)
+	set(options)
+	set(oneValueArgs FOLDER)
+	set(multiValueArgs)
+	cmake_parse_arguments(PARSE_ARGV 3 PA "${options}" "${oneValueArgs}" "${multiValueArgs}")
+
+	if(DEFINED PA_FOLDER)
+		set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "${PA_FOLDER}")
+		set_property(GLOBAL PROPERTY PRAGMA_MODULE_SKIP_TARGET_PROPERTY_FOLDER 1)
+	endif()
+
 	message("[PR] ---------------------- End Of Project \"${TARGET_NAME}\" ----------------------")
 endfunction()
