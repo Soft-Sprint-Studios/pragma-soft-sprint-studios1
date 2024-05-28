@@ -290,10 +290,6 @@ if platform == "linux":
 			
 			# CMake
 			"apt-get install cmake",
-
-			# Required for Curl
-			"apt-get install libssl-dev",
-			"apt install libssh2-1",
 			
 			# Curl
 			"apt-get install curl zip unzip tar",
