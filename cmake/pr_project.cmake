@@ -38,7 +38,7 @@ function(pr_finalize TARGET_NAME)
 	set(options)
 	set(oneValueArgs FOLDER)
 	set(multiValueArgs)
-	cmake_parse_arguments(PARSE_ARGV 3 PA "${options}" "${oneValueArgs}" "${multiValueArgs}")
+	cmake_parse_arguments(PARSE_ARGV 1 PA "${options}" "${oneValueArgs}" "${multiValueArgs}")
 
 	if(DEFINED PA_FOLDER)
 		set_target_properties(${TARGET_NAME} PROPERTIES FOLDER "${PA_FOLDER}")
