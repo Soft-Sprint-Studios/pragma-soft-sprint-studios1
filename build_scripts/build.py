@@ -261,7 +261,7 @@ if platform == "linux":
 		commands = [
 			# Required for the build script
 			"apt-get install python3",
-			
+
 			# Required for Pragma core
 			"apt install build-essential",
 			# "add-apt-repository ppa:savoury1/llvm-defaults-14",
@@ -748,7 +748,7 @@ if with_essential_client_modules:
 	add_pragma_module(
 		name="pr_prosper_vulkan",
 		commitSha="0b9e56419f3d8b375f900e214ef6d10b6464b956",
-		repositoryUrl="https://github.com/Silverlan/pr_prosper_vulkan.git"
+		repositoryUrl="https://github.com/Silverlan/pr_prosper_vulkan.git",
 		branch="feat/cxx_modules"
 	)
 
@@ -792,7 +792,7 @@ if with_pfm:
 		add_pragma_module(
 			name="pr_unirender",
 			commitSha="b3dc8f4b4fd7faeb48d12e7d30e6a1e63e482ee9",
-			repositoryUrl="https://github.com/Silverlan/pr_cycles.git"
+			repositoryUrl="https://github.com/Silverlan/pr_cycles.git",
 			branch="feat/cxx_modules"
 		)
 		add_pragma_module(
@@ -804,19 +804,19 @@ if with_pfm:
 		add_pragma_module(
 			name="pr_dmx",
 			commitSha="d36330830ad347f67ac1d6774fe9f64bdb60cd74",
-			repositoryUrl="https://github.com/Silverlan/pr_dmx.git"
+			repositoryUrl="https://github.com/Silverlan/pr_dmx.git",
 			branch="feat/cxx_modules"
 		)
 		add_pragma_module(
 			name="pr_xatlas",
 			commitSha="96fc049fce1a24cced7b7832ff8796edaa56d5e7",
-			repositoryUrl="https://github.com/Silverlan/pr_xatlas.git"
+			repositoryUrl="https://github.com/Silverlan/pr_xatlas.git",
 			branch="feat/cxx_modules"
 		)
 		add_pragma_module(
 			name="pr_davinci",
 			commitSha="c2e22225dbb6a4622d64d03540dc9da3e6b825b9",
-			repositoryUrl="https://github.com/Silverlan/pr_davinci.git"
+			repositoryUrl="https://github.com/Silverlan/pr_davinci.git",
 			branch="feat/cxx_modules"
 		)
 		add_pragma_module(
