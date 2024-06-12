@@ -19,8 +19,6 @@ if platform == "linux":
 else:
 	defaultGenerator = "Visual Studio 17 2022"
 parser.add_argument('--generator', help='The generator to use.', default=defaultGenerator)
-if platform == "win32":
-	parser.add_argument('--vcvars', help='Path to vcvars64.bat.', default="\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"")
 parser.add_argument("--with-essential-client-modules", type=str2bool, nargs='?', const=True, default=True, help="Include essential modules required to run Pragma.")
 parser.add_argument("--with-common-modules", type=str2bool, nargs='?', const=True, default=True, help="Include non-essential but commonly used modules (e.g. audio and physics modules).")
 parser.add_argument("--with-pfm", type=str2bool, nargs='?', const=True, default=False, help="Include the Pragma Filmmaker.")
@@ -30,9 +28,11 @@ parser.add_argument("--with-vr", type=str2bool, nargs='?', const=True, default=F
 parser.add_argument("--with-networking", type=str2bool, nargs='?', const=True, default=False, help="Include networking module(s) for multiplayer support.")
 parser.add_argument("--with-common-entities", type=str2bool, nargs='?', const=True, default=True, help="Include addons with support for common entity types.")
 parser.add_argument("--with-lua-debugger", type=str2bool, nargs='?', const=True, default=False, help="Include Lua-debugger support.")
+parser.add_argument("--with-swiftshader", type=str2bool, nargs='?', const=True, default=False, help="Include SwiftShader support for CPU-only rendering.")
 parser.add_argument('--vtune-include-path', help='The include path to the VTune profiler (required for CPU profiling).', default='')
 parser.add_argument('--vtune-library-path', help='The path to the "libittnotify" library of the VTune profiler (required for CPU profiling).', default='')
 parser.add_argument("--build", type=str2bool, nargs='?', const=True, default=True, help="Build Pragma after configurating and generating build files.")
+parser.add_argument("--build-swiftshader", type=str2bool, nargs='?', const=True, default=False, help="Builds SwiftShader from source instead of downloading prebuilt binaries.")
 parser.add_argument("--build-all", type=str2bool, nargs='?', const=True, default=False, help="Build all dependencies instead of downloading prebuilt binaries where available. Enabling this may significantly increase the disk space requirement and build time.")
 parser.add_argument('--build-config', help='The build configuration to use.', default='RelWithDebInfo')
 parser.add_argument('--build-directory', help='Directory to write the build files to. Can be relative or absolute.', default='build')
@@ -87,8 +87,6 @@ if platform == "linux":
 	no_sudo = args["no_sudo"]
 	no_confirm = args["no_confirm"]
 generator = args["generator"]
-#if platform == "win32":
-#	vcvars = args["vcvars
 with_essential_client_modules = args["with_essential_client_modules"]
 with_common_modules = args["with_common_modules"]
 with_pfm = args["with_pfm"]
@@ -98,6 +96,8 @@ with_vr = args["with_vr"]
 with_networking = args["with_networking"]
 with_common_entities = args["with_common_entities"]
 with_lua_debugger = args["with_lua_debugger"]
+with_swiftshader = args["with_swiftshader"]
+build_swiftshader = args["build_swiftshader"]
 vtune_include_path = args["vtune_include_path"]
 vtune_library_path = args["vtune_library_path"]
 build = args["build"]
@@ -122,8 +122,6 @@ if platform == "linux":
 	print("c_compiler: " +c_compiler)
 
 print("generator: " +generator)
-#if platform == "win32":
-#	print("vcvars: " +vcvars)
 print("with_essential_client_modules: " +str(with_essential_client_modules))
 print("with_common_modules: " +str(with_common_modules))
 print("with_pfm: " +str(with_pfm))
@@ -131,6 +129,8 @@ print("with_core_pfm_modules: " +str(with_core_pfm_modules))
 print("with_all_pfm_modules: " +str(with_all_pfm_modules))
 print("with_vr: " +str(with_vr))
 print("with_lua_debugger: " +str(with_lua_debugger))
+print("with_swiftshader: " +str(with_swiftshader))
+print("build_swiftshader: " +str(build_swiftshader))
 print("rerun: " +str(rerun))
 print("update: " +str(update))
 print("build: " +str(build))
@@ -290,6 +290,9 @@ if platform == "linux":
 			
 			# CMake
 			"apt-get install cmake",
+
+			# Required for Curl
+			"apt-get install libssl-dev",
 			
 			# Curl
 			"apt-get install curl zip unzip tar",
@@ -300,11 +303,9 @@ if platform == "linux":
 			#install freetype for linking. X server frontends (Gnome, KDE etc) already include it somewhere down the line. Also install pkg-config for easy export of flags.
 			"apt-get install pkg-config libfreetype-dev",
 
-
 			# Ninja
 			"apt-get install ninja-build"
 		]
-
 		install_system_packages(commands, no_confirm)
 
 module_list = []
@@ -498,6 +499,40 @@ os.chdir("SPIRV-Headers")
 reset_to_commit("4995a2f2723c401eb0ea3e10c81298906bf1422b")
 os.chdir("../../")
 os.chdir("../../")
+
+########## SwiftShader ##########
+if with_swiftshader:
+	os.chdir(deps_dir)
+	swiftshader_root = normalize_path(os.getcwd() +"/swiftshader")
+	swiftshader_modules_dir = install_dir +"/modules/swiftshader/"
+
+	swiftshader_bin_dir = swiftshader_root +"/build/bin/"
+	if build_swiftshader:
+		if not Path(swiftshader_root).is_dir():
+			print_msg("SwiftShader not found. Downloading...")
+			git_clone("https://github.com/Silverlan/swiftshader.git")
+		os.chdir("swiftshader")
+		reset_to_commit("8f431ea")
+		
+		print_msg("Building SwiftShader...")
+		os.chdir("build")
+		cmake_configure("..",generator)
+		cmake_build("Release")
+	else:
+		if not Path(swiftshader_root).is_dir():
+			mkpath(swiftshader_bin_dir)
+			os.chdir(swiftshader_bin_dir)
+			print_msg("Downloading prebuilt SwiftShader...")
+			if platform == "win32":
+				http_extract("https://github.com/Silverlan/swiftshader/releases/download/latest/swiftshader.zip")
+			else:
+				http_extract("https://github.com/Silverlan/swiftshader/releases/download/latest/swiftshader.tar.gz",format="tar.gz")
+	print_msg("Installing SwiftShader...")
+	mkpath(swiftshader_modules_dir)
+	if platform == "win32":
+		cp(swiftshader_bin_dir +"/vulkan-1.dll",swiftshader_modules_dir)
+	else:
+		cp(swiftshader_bin_dir +"/libvulkan.so.1",swiftshader_modules_dir)
 
 ########## vcpkg ##########
 os.chdir(deps_dir)
@@ -702,8 +737,6 @@ def execbuildscript(filepath):
 		l["install_system_packages"] = install_system_packages
 	#	l["harfbuzz_include_dir"] = harfbuzz_include_dir
 	#	l["harfbuzz_lib"] = harfbuzz_lib
-	#else:
-	#	l["vcvars"] = "vcvars"
 
 	if platform == "win32":
 		l["determine_vs_installation_path"] = determine_vs_installation_path
@@ -779,7 +812,7 @@ if with_pfm:
 		)
 		add_pragma_module(
 			name="pr_dmx",
-			commitSha="d36330830ad347f67ac1d6774fe9f64bdb60cd74",
+			commitSha="f818ed1954705d98739ad59ad6e8d928e910aca1",
 			repositoryUrl="https://github.com/Silverlan/pr_dmx.git"
 		)
 	if with_all_pfm_modules:
@@ -791,21 +824,8 @@ if with_pfm:
 		)
 		add_pragma_module(
 			name="pr_unirender",
-			commitSha="b3dc8f4b4fd7faeb48d12e7d30e6a1e63e482ee9",
-			repositoryUrl="https://github.com/Silverlan/pr_cycles.git",
-			branch="feat/cxx_modules"
-		)
-		add_pragma_module(
-			name="pr_curl",
-			commitSha="b5834184b8e2b26f601ba9fcd2bf28543e49c581",
-			repositoryUrl="https://github.com/Silverlan/pr_curl.git",
-			branch="feat/cxx_modules"
-		)
-		add_pragma_module(
-			name="pr_dmx",
-			commitSha="d36330830ad347f67ac1d6774fe9f64bdb60cd74",
-			repositoryUrl="https://github.com/Silverlan/pr_dmx.git",
-			branch="feat/cxx_modules"
+			commitSha="6e64315dbcb855a098f3bce4746c30da1c89faba",
+			repositoryUrl="https://github.com/Silverlan/pr_cycles.git"
 		)
 		add_pragma_module(
 			name="pr_xatlas",
@@ -837,15 +857,14 @@ if with_pfm:
 if with_vr:
 	add_pragma_module(
 		name="pr_openvr",
-		commitSha="541231dd666f85be93fc9dc7d5480679be507d0c",
-		repositoryUrl="https://github.com/Silverlan/pr_openvr.git",
-		branch="feat/cxx_modules"
+		commitSha="c9ebb5553fc44fea3d02b5fc4762ed7c81797d0c",
+		repositoryUrl="https://github.com/Silverlan/pr_openvr.git"
 	)
 
 if with_networking:
 	add_pragma_module(
 		name="pr_steam_networking_sockets",
-		commitSha="c76bb55fdbd736f0d3992d44f2c867a365920aa5",
+		commitSha="311e721c1160d631461c5860d70575ffe79208ef",
 		repositoryUrl="https://github.com/Silverlan/pr_steam_networking_sockets.git",
 		skipBuildTarget=True,
 		branch="feat/cxx_modules"
@@ -878,6 +897,7 @@ for module in module_info:
 			if moduleUrl:
 				get_submodule(moduleName,moduleUrl,commitId,branch)
 
+	os.chdir(moduleDir)
 	scriptPath = moduleDir +"build_scripts/setup.py"
 	if Path(scriptPath).is_file():
 		print_msg("Executing module setup script...")
@@ -1054,11 +1074,11 @@ def download_addon(name,addonName,url,commitId=None):
 curDir = os.getcwd()
 if not skip_repository_updates:
 	if with_pfm:
-		download_addon("PFM","filmmaker","https://github.com/Silverlan/pfm.git","dd8334da633ab0f2cd73c418b1cf2a771c582ec5")
+		download_addon("PFM","filmmaker","https://github.com/Silverlan/pfm.git","675a87a79dcade37d32ede335559714aac2b2120")
 		download_addon("model editor","tool_model_editor","https://github.com/Silverlan/pragma_model_editor.git","56d46dacb398fa7540e794359eaf1081c9df1edd")
 
 	if with_vr:
-		download_addon("VR","virtual_reality","https://github.com/Silverlan/PragmaVR.git","c773f17")
+		download_addon("VR","virtual_reality","https://github.com/Silverlan/PragmaVR.git","6dfb9dbb1a87b9bb6903e8af6a8dc4e892d38269")
 
 	if with_pfm:
 		download_addon("PFM Living Room Demo","pfm_demo_living_room","https://github.com/Silverlan/pfm_demo_living_room.git","4cbecad4a2d6f502b6d9709178883678101f7e2c")
