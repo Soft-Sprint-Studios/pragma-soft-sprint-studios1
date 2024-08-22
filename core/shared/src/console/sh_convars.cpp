@@ -266,7 +266,7 @@ REGISTER_SHARED_CONCOMMAND(
   ConVarFlags::None, "Finds similar console commands to whatever was given as argument.");
 
 REGISTER_ENGINE_CONCOMMAND(
-  listmaps,
+  maps,
   [](NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &) {
 	  std::vector<std::string> resFiles;
 	  auto exts = pragma::asset::get_supported_extensions(pragma::asset::Type::Map);

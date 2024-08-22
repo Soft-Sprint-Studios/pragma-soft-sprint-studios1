@@ -681,6 +681,12 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		  pList->AddChoice("60 FPS", "60");
 		  pList->AddChoice("90 FPS", "90");
 		  pList->AddChoice("120 FPS", "120");
+		  //8/21/2024
+		  //Why was the fps limiter set to only max 120 fps? Some monitors are up to 360 including 144,165 etc
+		  pList->AddChoice("144 FPS", "144");
+		  pList->AddChoice("165 FPS", "165");
+		  pList->AddChoice("240 FPS", "240");
+		  pList->AddChoice("360 FPS", "360");
 	  },
 	  "cl_max_fps");
 	//
@@ -764,7 +770,7 @@ void WIMainMenuOptions::InitializeVideoSettings()
 	m_hdrr = pList->AddToggleChoice(Locale::GetText("hdrr"), "cl_render_hdrr")->GetHandle();
 	//
 	// Bloom
-	m_hBloom = pList->AddToggleChoice(Locale::GetText("bloom"), "cl_render_bloom")->GetHandle();
+	m_hBloom = pList->AddToggleChoice(Locale::GetText("bloom"), "render_bloom_enabled")->GetHandle();
 	//
 	// Motion Blur
 	m_hMotionBlur = pList->AddSlider(Locale::GetText("motion_blur"), sliderInitializer, "cl_render_motion_blur")->GetHandle();
@@ -998,20 +1004,22 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		}
 	}
 
-	auto showAdvancedOptions = c_engine->IsDeveloperModeEnabled();
+	//8/21/2024
+	//HACK set this to always be false advanced options, in order to ensure only working settings show
+	auto showAdvancedOptions = false;
 	if(showAdvancedOptions == false) {
 		pList->GetRow("cl_render_vsync_enabled")->SetVisible(false);
 		pList->GetRow("cl_material_streaming_enabled")->SetVisible(false);
-		pList->GetRow("cl_render_anti_aliasing")->SetVisible(false);
+		pList->GetRow("cl_render_anti_aliasing")->SetVisible(true);
 		pList->GetRow("cl_render_ssao")->SetVisible(false);
 		pList->GetRow("cl_render_hdrr")->SetVisible(false);
-		pList->GetRow("cl_render_bloom")->SetVisible(false);
+		pList->GetRow("render_bloom_enabled")->SetVisible(true);
 		pList->GetRow("cl_render_motion_blur")->SetVisible(false);
 		pList->GetRow("cl_render_occlusion_culling")->SetVisible(false);
 		pList->GetRow("cl_render_depth_of_field")->SetVisible(false);
 		pList->GetRow("cl_render_present_mode")->SetVisible(false);
-		pList->GetRow("cl_render_particle_quality")->SetVisible(false);
-		pList->GetRow("cl_render_reflection_quality")->SetVisible(false);
+		pList->GetRow("cl_render_particle_quality")->SetVisible(true);
+		pList->GetRow("cl_render_reflection_quality")->SetVisible(true);
 		pList->GetRow("cl_render_shadow_resolution")->SetVisible(false);
 		pList->GetRow("cl_render_shadow_dynamic")->SetVisible(false);
 		pList->GetRow("cl_render_shadow_update_frequency")->SetVisible(false);
