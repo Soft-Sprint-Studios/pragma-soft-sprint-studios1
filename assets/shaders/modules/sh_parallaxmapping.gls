@@ -21,31 +21,52 @@
 #endif
 
 //Parallax Occlusion Mapping function from https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
-vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+vec2 RefineParallaxMapping(vec2 texCoords, vec3 viewDir)
 {
-	const float numLayers = get_parallax_steps();
-	const float height_scale = get_parallax_height_scale();
-	float layerDepth = 1.0 / numLayers;
-	float currentLayerDepth = 0.0;
-	vec2 P = viewDir.xy * height_scale; 
-	vec2 deltaTexCoords = P / numLayers;
-	vec2 currentTexCoords = texCoords;
-	float currentDepthMapValue = 1.0 -texture(u_parallaxMap, currentTexCoords).r;
-  
-	while (currentLayerDepth < currentDepthMapValue)
-	{
-		currentTexCoords -= deltaTexCoords;
-		currentDepthMapValue = 1.0 -texture(u_parallaxMap, currentTexCoords).r;  
-		currentLayerDepth += layerDepth;  
-	}
+    const float numLayers = get_parallax_steps();
+    const float height_scale = get_parallax_height_scale();
+    float layerDepth = 1.0 / numLayers;
+    float currentLayerDepth = 0.0;
+    vec2 P = viewDir.xy * height_scale;
+    vec2 deltaTexCoords = P / numLayers;
+    vec2 currentTexCoords = texCoords;
+    float currentDepthMapValue = 1.0 - texture(u_parallaxMap, currentTexCoords).r;
 
-	vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
-	float afterDepth = currentDepthMapValue - currentLayerDepth;
-	float beforeDepth = (1.0 -texture(u_parallaxMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
-	float weight = afterDepth / (afterDepth - beforeDepth);
-	vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+    while (currentLayerDepth < currentDepthMapValue)
+    {
+        currentTexCoords -= deltaTexCoords;
+        currentDepthMapValue = 1.0 - texture(u_parallaxMap, currentTexCoords).r;
+        currentLayerDepth += layerDepth;
+    }
 
-	return finalTexCoords;  
+    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+    float afterDepth = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = (1.0 - texture(u_parallaxMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
+    float weight = afterDepth / (afterDepth - beforeDepth);
+    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+    vec2 refinedTexCoords = texCoords;
+    vec2 refinedDeltaTexCoords = deltaTexCoords / numLayers;
+    float refinedLayerDepth = layerDepth / numLayers;
+
+    currentLayerDepth = 0.0;
+    vec2 tempTexCoords = refinedTexCoords;
+    float refinedDepthMapValue = 1.0 - texture(u_parallaxMap, tempTexCoords).r;
+
+    while (currentLayerDepth < refinedDepthMapValue)
+    {
+        tempTexCoords -= refinedDeltaTexCoords;
+        refinedDepthMapValue = 1.0 - texture(u_parallaxMap, tempTexCoords).r;
+        currentLayerDepth += refinedLayerDepth;
+    }
+
+    vec2 refinedPrevTexCoords = tempTexCoords + refinedDeltaTexCoords;
+    float refinedAfterDepth = refinedDepthMapValue - currentLayerDepth;
+    float refinedBeforeDepth = (1.0 - texture(u_parallaxMap, refinedPrevTexCoords).r) - currentLayerDepth + refinedLayerDepth;
+    float refinedWeight = refinedAfterDepth / (refinedAfterDepth - refinedBeforeDepth);
+    refinedTexCoords = refinedPrevTexCoords * refinedWeight + tempTexCoords * (1.0 - refinedWeight);
+
+    return refinedTexCoords;
 }
 
 //Corrected Viewdir calculations here
@@ -63,7 +84,7 @@ vec2 get_parallax_coordinates(bool useParallaxMap, vec2 texCoords)
 	vec3 vertPosWs = fs_in.vert_pos_ws;
 	vec3 viewDirWs = normalize(camPosWs - vertPosWs);
 	vec3 viewDirTs = normalize(tbnMatrix * viewDirWs);
-	vec2 finalTexCoords = ParallaxMapping(texCoords, viewDirTs);
+	vec2 finalTexCoords = RefineParallaxMapping(texCoords, viewDirTs);
 
 	return finalTexCoords;
 #else
