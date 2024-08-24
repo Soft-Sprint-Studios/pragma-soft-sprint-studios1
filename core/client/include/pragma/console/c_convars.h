@@ -45,6 +45,7 @@ REGISTER_CONVAR_CL(cl_show_fps, udm::Type::Boolean, "0", ConVarFlags::None, "Dis
 
 REGISTER_CONVAR_CL(render_vsync_enabled, udm::Type::Boolean, "1", ConVarFlags::Archive, "1 = Vertical sync enabled, 0 = disabled.");
 REGISTER_CONVAR_CL(render_normalmapping_enabled, udm::Type::Boolean, "1", ConVarFlags::Archive, "1 = Normal mapping enabled, 0 = disabled.");
+REGISTER_CONVAR_CL(render_parallaxmapping_enabled, udm::Type::Boolean, "1", ConVarFlags::Archive, "1 = Parallax mapping enabled, 0 = disabled.");
 REGISTER_CONVAR_CL(render_csm_max_distance, udm::Type::Float, "8192", ConVarFlags::Archive, "The maximum distance at which csm shadows are casted. A larger distance means lower quality.");
 REGISTER_CONVAR_CL(render_texture_filtering, udm::Type::UInt8, "1", ConVarFlags::Archive, "0 = Nearest-Neighbor, 1 = Bilinear, 2 = trilinear.");
 REGISTER_CONVAR_CL(render_hdr_max_exposure, udm::Type::Float, "8", ConVarFlags::Archive, "Expore will be clamped at this value. Can be overwritten by the map.");
@@ -58,8 +59,8 @@ REGISTER_CONVAR_CL(render_draw_water, udm::Type::Boolean, "1", ConVarFlags::Chea
 REGISTER_CONVAR_CL(render_draw_view, udm::Type::Boolean, "1", ConVarFlags::Cheat, "1 = Default, 0 = View-Models aren't drawn.");
 REGISTER_CONVAR_CL(render_draw_particles, udm::Type::Boolean, "1", ConVarFlags::Cheat, "1 = Default, 0 = Particles aren't drawn.");
 REGISTER_CONVAR_CL(render_draw_glow, udm::Type::Boolean, "1", ConVarFlags::Cheat, "1 = Default, 0 = Glow-effects aren't drawn.");
-REGISTER_CONVAR_CL(render_clear_scene, udm::Type::Boolean, "0", static_cast<ConVarFlags>(0), "0 = Default, 1 = Screen is cleared before scene is rendered.");
-REGISTER_CONVAR_CL(render_clear_scene_color, udm::Type::Vector4i, "0 0 0 255", static_cast<ConVarFlags>(0), "Clear color to use if render_clear_scene is set to 1.");
+REGISTER_CONVAR_CL(render_clear_scene, udm::Type::Boolean, "1", static_cast<ConVarFlags>(0), "0 = Default, 1 = Screen is cleared before scene is rendered.");
+REGISTER_CONVAR_CL(render_clear_scene_color, udm::Type::Vector4i, "255 0 0 255", static_cast<ConVarFlags>(0), "Clear color to use if render_clear_scene is set to 1.");
 REGISTER_CONVAR_CL(render_forwardplus_tile_size, udm::Type::UInt32, "16", static_cast<ConVarFlags>(0), "Changes the tile size used for the light culling in forward+.");
 REGISTER_CONVAR_CL(render_technique, udm::Type::UInt8, "0", static_cast<ConVarFlags>(0), "0 = Rasterization, 1 = Raytracing");
 REGISTER_CONVAR_CL(sky_override, udm::Type::String, "", static_cast<ConVarFlags>(0), "Replaces the material for all current skyboxes with the specified material.");

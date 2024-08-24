@@ -309,6 +309,7 @@ std::shared_ptr<Texture> ShaderGameWorldLightingPass::GetTexture(const std::stri
 static void to_srgb_color(Vector4 &col) { col = Vector4 {uimg::linear_to_srgb(reinterpret_cast<Vector3 &>(col)), col.w}; }
 
 static auto cvNormalMappingEnabled = GetClientConVar("render_normalmapping_enabled");
+static auto cvParallaxMappingEnabled = GetClientConVar("render_parallaxmapping_enabled");
 void ShaderGameWorldLightingPass::ApplyMaterialFlags(CMaterial &mat, MaterialFlags &outFlags) const {}
 ShaderGameWorldLightingPass::MaterialData ShaderGameWorldLightingPass::GenerateMaterialData(CMaterial &mat)
 {
@@ -325,14 +326,16 @@ ShaderGameWorldLightingPass::MaterialData ShaderGameWorldLightingPass::GenerateM
 		return {};
 	auto *parallaxMap = mat.GetParallaxMap();
 	if(parallaxMap != nullptr && parallaxMap->texture != nullptr) {
-		matFlags |= MaterialFlags::Parallax;
+		if(cvParallaxMappingEnabled->GetBool() == true) {
+			matFlags |= MaterialFlags::Parallax;
 
-		float heightScale = matData.GetParallaxHeightScale();
-		data->GetFloat("parallax_height_scale", &heightScale);
-		matData.SetParallaxHeightScale(heightScale);
-		int32_t parallaxSteps = matData.parallaxSteps;
-		data->GetInt("parallax_steps", &parallaxSteps);
-		matData.parallaxSteps = parallaxSteps;
+			float heightScale = matData.GetParallaxHeightScale();
+			data->GetFloat("parallax_height_scale", &heightScale);
+			matData.SetParallaxHeightScale(heightScale);
+			int32_t parallaxSteps = matData.parallaxSteps;
+			data->GetInt("parallax_steps", &parallaxSteps);
+			matData.parallaxSteps = parallaxSteps;
+		}
 	}
 
 	if(cvNormalMappingEnabled->GetBool() == true) {

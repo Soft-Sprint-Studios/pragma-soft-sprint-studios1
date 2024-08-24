@@ -402,6 +402,7 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		auto bSsao = true;
 		auto bHdrr = true;
 		auto bBloom = true;
+		auto bParallax = true;
 		auto motionBlur = 0.f;
 		uint32_t occlusionCulling = 4;
 		auto bDoF = false;
@@ -542,6 +543,8 @@ void WIMainMenuOptions::InitializeVideoSettings()
 			static_cast<WICheckbox *>(el->m_hdrr.get())->SetChecked(bHdrr);
 		if(el->m_hBloom.IsValid())
 			static_cast<WICheckbox *>(el->m_hBloom.get())->SetChecked(bBloom);
+		if(el->m_hParallax.IsValid())
+			static_cast<WICheckbox *>(el->m_hParallax.get())->SetChecked(bParallax);
 		if(el->m_hMotionBlur.IsValid())
 			static_cast<WISlider *>(el->m_hMotionBlur.get())->SetValue(motionBlur);
 		if(el->m_hOcclusionCulling.IsValid())
@@ -771,6 +774,8 @@ void WIMainMenuOptions::InitializeVideoSettings()
 	//
 	// Bloom
 	m_hBloom = pList->AddToggleChoice(Locale::GetText("bloom"), "render_bloom_enabled")->GetHandle();
+	// Parallax
+	m_hParallax = pList->AddToggleChoice(Locale::GetText("parallax_mapping"), "render_parallaxmapping_enabled")->GetHandle();
 	//
 	// Motion Blur
 	m_hMotionBlur = pList->AddSlider(Locale::GetText("motion_blur"), sliderInitializer, "cl_render_motion_blur")->GetHandle();
@@ -1014,6 +1019,7 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		pList->GetRow("cl_render_ssao")->SetVisible(false);
 		pList->GetRow("cl_render_hdrr")->SetVisible(false);
 		pList->GetRow("render_bloom_enabled")->SetVisible(true);
+		pList->GetRow("render_parallaxmapping_enabled")->SetVisible(true);
 		pList->GetRow("cl_render_motion_blur")->SetVisible(false);
 		pList->GetRow("cl_render_occlusion_culling")->SetVisible(false);
 		pList->GetRow("cl_render_depth_of_field")->SetVisible(false);

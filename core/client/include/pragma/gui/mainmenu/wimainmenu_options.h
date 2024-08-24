@@ -49,6 +49,7 @@ class DLLCLIENT WIMainMenuOptions : public WIMainMenuBase {
 	WIHandle m_hSsao;
 	WIHandle m_hdrr;
 	WIHandle m_hBloom;
+	WIHandle m_hParallax;
 	WIHandle m_hMotionBlur;
 	WIHandle m_hOcclusionCulling;
 	WIHandle m_hDoF;

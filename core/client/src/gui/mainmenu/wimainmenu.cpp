@@ -181,6 +181,9 @@ void WIMainMenu::Initialize()
 	menu->SetSize(GetWidth(), GetHeight());
 	menu->SetAnchor(0.f, 0.f, 1.f, 1.f);
 	menu->AddMenuItem(Locale::GetText("menu_newgame"), FunctionCallback<>::Create([this]() { SetActiveMenu(m_hNewGame); }));
+	//8/23/2024
+	//Disabled ServerBrowser as its useless for us
+    #ifdef ENABLED_SERVERBROWSER
 	menu->AddMenuItem(Locale::GetText("menu_find_servers"), FunctionCallback<>::Create([this]() {
 		if(m_hServerBrowser.IsValid())
 			m_hServerBrowser->Remove();
@@ -191,6 +194,7 @@ void WIMainMenu::Initialize()
 		sb->SetPos(200, 200);
 		sb->RequestFocus();
 	}));
+	#endif
 #ifdef _DEBUG
 	menu->AddMenuItem(Locale::GetText("menu_loadgame"), FunctionCallback<>::Create([this]() { SetActiveMenu(m_hLoad); }));
 #endif
@@ -198,11 +202,15 @@ void WIMainMenu::Initialize()
 #if WIMENU_ENABLE_CREDITS_MENU != 0
 	menu->AddMenuItem(Locale::GetText("menu_credits"), FunctionCallback<>::Create([this]() { SetActiveMenu(m_hCredits); }));
 #endif
+	//8/23/2024
+	//Disabled Addons as its useless for us
+	#ifdef ENABLED_ADDONS
 	menu->AddMenuItem(Locale::GetText("menu_addons"), FunctionCallback<>::Create([this]() {
 		//SetActiveMenu(m_hMods);
 		//ShellExecute(0,0,engine_info::get_modding_hub_url().c_str(),0,0,SW_SHOW);
 		util::open_url_in_browser("steam://url/SteamWorkshopPage/" + std::to_string(engine_info::get_steam_app_id()));
 	}));
+	#endif
 #ifdef _DEBUG
 	menu->AddMenuItem("Loadscreen", FunctionCallback<>::Create([this]() { SetActiveMenu(m_hLoadScreen); }));
 #endif
