@@ -20,7 +20,7 @@
 	layout(LAYOUT_ID(DESCRIPTOR_SET_MATERIAL,DESCRIPTOR_SET_MATERIAL_BINDING_PARALLAX_MAP)) uniform sampler2D u_parallaxMap;
 #endif
 
-//Parallax Occlusion Mapping function from https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
+//Parallax Occlusion Mapping function from https://learnopengl.com/Advanced-Lighting/Parallax-Mapping Modified to be Contact Refinement Parallax Mapping
 vec2 RefineParallaxMapping(vec2 texCoords, vec3 viewDir)
 {
     const float numLayers = get_parallax_steps();
