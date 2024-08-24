@@ -202,15 +202,11 @@ void WIMainMenu::Initialize()
 #if WIMENU_ENABLE_CREDITS_MENU != 0
 	menu->AddMenuItem(Locale::GetText("menu_credits"), FunctionCallback<>::Create([this]() { SetActiveMenu(m_hCredits); }));
 #endif
-	//8/23/2024
-	//Disabled Addons as its useless for us
-	#ifdef ENABLED_ADDONS
-	menu->AddMenuItem(Locale::GetText("menu_addons"), FunctionCallback<>::Create([this]() {
+	/*menu->AddMenuItem(Locale::GetText("menu_addons"), FunctionCallback<>::Create([this]() {
 		//SetActiveMenu(m_hMods);
 		//ShellExecute(0,0,engine_info::get_modding_hub_url().c_str(),0,0,SW_SHOW);
 		util::open_url_in_browser("steam://url/SteamWorkshopPage/" + std::to_string(engine_info::get_steam_app_id()));
-	}));
-	#endif
+	}));*/
 #ifdef _DEBUG
 	menu->AddMenuItem("Loadscreen", FunctionCallback<>::Create([this]() { SetActiveMenu(m_hLoadScreen); }));
 #endif
