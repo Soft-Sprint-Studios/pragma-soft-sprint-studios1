@@ -24,20 +24,55 @@ using namespace pragma;
 
 extern DLLCLIENT CEngine *c_engine;
 
-decltype(ShaderWater::DESCRIPTOR_SET_MATERIAL) ShaderWater::DESCRIPTOR_SET_MATERIAL = {{prosper::DescriptorSetInfo::Binding {// DuDv Map
-                                                                                          prosper::DescriptorType::CombinedImageSampler, prosper::ShaderStageFlags::FragmentBit},
-  prosper::DescriptorSetInfo::Binding {// Normal Map
-    prosper::DescriptorType::CombinedImageSampler, prosper::ShaderStageFlags::FragmentBit}}};
-decltype(ShaderWater::DESCRIPTOR_SET_WATER) ShaderWater::DESCRIPTOR_SET_WATER = {{prosper::DescriptorSetInfo::Binding {// Reflection Map
-                                                                                    prosper::DescriptorType::CombinedImageSampler, prosper::ShaderStageFlags::FragmentBit},
-  prosper::DescriptorSetInfo::Binding {// Refraction Map
-    prosper::DescriptorType::CombinedImageSampler, prosper::ShaderStageFlags::FragmentBit},
-  prosper::DescriptorSetInfo::Binding {// Refraction Depth
-    prosper::DescriptorType::CombinedImageSampler, prosper::ShaderStageFlags::FragmentBit},
-  prosper::DescriptorSetInfo::Binding {// Water settings
-    prosper::DescriptorType::UniformBuffer, prosper::ShaderStageFlags::FragmentBit},
-  prosper::DescriptorSetInfo::Binding {// Water fog
-    prosper::DescriptorType::UniformBuffer, prosper::ShaderStageFlags::FragmentBit}}};
+decltype(ShaderWater::DESCRIPTOR_SET_MATERIAL) ShaderWater::DESCRIPTOR_SET_MATERIAL = {
+    {
+        // DuDv Map
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::CombinedImageSampler, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+        // Normal Map
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::CombinedImageSampler, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+        // Flow Map
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::CombinedImageSampler, 
+            prosper::ShaderStageFlags::FragmentBit
+        }
+    }
+};
+
+decltype(ShaderWater::DESCRIPTOR_SET_WATER) ShaderWater::DESCRIPTOR_SET_WATER = {
+    {
+        // Reflection Map
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::CombinedImageSampler, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+        // Refraction Map
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::CombinedImageSampler, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+        // Refraction Depth
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::CombinedImageSampler, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+        // Water settings
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::UniformBuffer, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+        // Water fog
+        prosper::DescriptorSetInfo::Binding{
+            prosper::DescriptorType::UniformBuffer, 
+            prosper::ShaderStageFlags::FragmentBit
+        },
+    }
+};
 ShaderWater::ShaderWater(prosper::IPrContext &context, const std::string &identifier) : ShaderGameWorldLightingPass(context, identifier, "world/vs_textured", "world/fs_water")
 {
 	// SetBaseShader<ShaderTextured3DBase>();
@@ -62,8 +97,18 @@ std::shared_ptr<prosper::IDescriptorSetGroup> ShaderWater::InitializeMaterialDes
 		if(texture->HasValidVkTexture())
 			descSet.SetBindingTexture(*texture->GetVkTexture(), umath::to_integral(MaterialBinding::NormalMap));
 	}
+
+	// Bind Flow Map
+	auto *flowMap = mat.GetTextureInfo(Material::FLOW_MAP_IDENTIFIER);
+	if(flowMap != nullptr && flowMap->texture != nullptr) {
+		auto texture = std::static_pointer_cast<Texture>(flowMap->texture);
+		if(texture->HasValidVkTexture())
+			descSet.SetBindingTexture(*texture->GetVkTexture(), umath::to_integral(MaterialBinding::FlowMap));
+	}
+
 	return descSetGroup;
 }
+
 bool ShaderWater::RecordBindEntity(rendering::ShaderProcessor &shaderProcessor, CRenderComponent &renderC, prosper::IShaderPipelineLayout &layout, uint32_t entityInstanceDescriptorSetIndex) const
 {
 	if(ShaderGameWorldLightingPass::RecordBindEntity(shaderProcessor, renderC, layout, entityInstanceDescriptorSetIndex) == false)
@@ -92,6 +137,7 @@ bool ShaderWater::RecordBindEntity(rendering::ShaderProcessor &shaderProcessor, 
 		pushConstants.waterFogIntensity = 1.f;
 		pushConstants.enableReflection = true;
 	}
+	pushConstants.FlowMapSpeed = 1.0f;
 	auto &cmd = shaderProcessor.GetCommandBuffer();
 	return cmd.RecordBindDescriptorSets(prosper::PipelineBindPoint::Graphics, layout, DESCRIPTOR_SET_WATER.setIndex, *ds) && cmd.RecordPushConstants(layout, prosper::ShaderStageFlags::FragmentBit, sizeof(ShaderGameWorldLightingPass::PushConstants), sizeof(PushConstants), &pushConstants);
 }

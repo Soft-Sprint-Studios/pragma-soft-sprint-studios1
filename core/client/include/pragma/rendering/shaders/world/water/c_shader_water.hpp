@@ -19,6 +19,7 @@ namespace pragma {
 		enum class MaterialBinding : uint32_t {
 			DuDvMap = 0u,
 			NormalMap,
+			FlowMap,
 
 			Count
 		};
@@ -36,6 +37,7 @@ namespace pragma {
 #pragma pack(push, 1)
 		struct PushConstants {
 			float waterFogIntensity;
+			float FlowMapSpeed;
 			uint32_t enableReflection;
 		};
 #pragma pack(pop)
