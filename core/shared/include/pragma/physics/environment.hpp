@@ -241,6 +241,7 @@ std::shared_ptr<T> pragma::physics::IEnvironment::CreateSharedPtr(TARGS &&...arg
 		                               delete o;
 	                               }};
 	ptr->Initialize();
+	ptr->InitializeLuaObject(GetNetworkState().GetLuaState());
 	return ptr;
 }
 template<class T, typename... TARGS>
@@ -251,7 +252,7 @@ util::TSharedHandle<T> pragma::physics::IEnvironment::CreateSharedHandle(TARGS &
 		                                      delete o;
 	                                      }};
 	handle->Initialize();
-	handle->InitializeLuaHandle(util::TWeakSharedHandle<IBase> {util::shared_handle_cast<T, IBase>(handle)});
+	handle->InitializeLuaHandle(GetNetworkState().GetLuaState(), util::TWeakSharedHandle<IBase> {util::shared_handle_cast<T, IBase>(handle)});
 	return handle;
 }
 

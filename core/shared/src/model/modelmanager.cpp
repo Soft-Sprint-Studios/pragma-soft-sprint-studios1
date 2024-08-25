@@ -79,7 +79,9 @@ bool pragma::asset::ModelProcessor::Load()
 	if(!r)
 		return false;
 	model = mdlHandler.model;
-	model->Update(ModelUpdateFlags::Initialize);
+	// Collision shape initialization creates Lua objects and therefore
+	// has to be done on the main thread
+	model->Update(ModelUpdateFlags::AllData & ~ModelUpdateFlags::UpdateCollisionShapes);
 	return true;
 }
 bool pragma::asset::ModelProcessor::Finalize()
@@ -105,7 +107,8 @@ bool pragma::asset::ModelProcessor::Finalize()
 		model->Update(); // Need to update again
 	}
 
-	model->Update(ModelUpdateFlags::UpdateBuffers | ModelUpdateFlags::UpdateChildren);
+	// Note: Collision shapes have to be updated on the main thread, because of the creation of a luabind object
+	model->Update(ModelUpdateFlags::UpdateBuffers | ModelUpdateFlags::UpdateChildren | ModelUpdateFlags::UpdateCollisionShapes);
 #ifdef PRAGMA_ENABLE_VTUNE_PROFILING
 	::debug::get_domain().EndTask();
 #endif

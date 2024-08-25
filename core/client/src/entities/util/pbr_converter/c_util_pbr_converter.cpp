@@ -171,7 +171,7 @@ bool CPBRConverterComponent::ShouldConvertMaterial(CMaterial &mat) const
 {
 	if(m_convertedMaterials.find(mat.GetName()) != m_convertedMaterials.end() || IsPBR(mat) == false)
 		return false;
-	return mat.GetTextureInfo(Material::RMA_MAP_IDENTIFIER) == nullptr;
+	return mat.GetRMAMap() == nullptr;
 }
 
 bool CPBRConverterComponent::IsPBR(CMaterial &mat) const
