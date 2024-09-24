@@ -402,6 +402,7 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		auto bSsao = true;
 		auto bHdrr = true;
 		auto bBloom = true;
+		auto bParallax = true;
 		auto motionBlur = 0.f;
 		uint32_t occlusionCulling = 4;
 		auto bDoF = false;
@@ -542,6 +543,8 @@ void WIMainMenuOptions::InitializeVideoSettings()
 			static_cast<WICheckbox *>(el->m_hdrr.get())->SetChecked(bHdrr);
 		if(el->m_hBloom.IsValid())
 			static_cast<WICheckbox *>(el->m_hBloom.get())->SetChecked(bBloom);
+		if(el->m_hParallax.IsValid())
+			static_cast<WICheckbox *>(el->m_hParallax.get())->SetChecked(bParallax);
 		if(el->m_hMotionBlur.IsValid())
 			static_cast<WISlider *>(el->m_hMotionBlur.get())->SetValue(motionBlur);
 		if(el->m_hOcclusionCulling.IsValid())
@@ -681,6 +684,12 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		  pList->AddChoice("60 FPS", "60");
 		  pList->AddChoice("90 FPS", "90");
 		  pList->AddChoice("120 FPS", "120");
+		  //8/21/2024
+		  //Why was the fps limiter set to only max 120 fps? Some monitors are up to 360 including 144,165 etc
+		  pList->AddChoice("144 FPS", "144");
+		  pList->AddChoice("165 FPS", "165");
+		  pList->AddChoice("240 FPS", "240");
+		  pList->AddChoice("360 FPS", "360");
 	  },
 	  "cl_max_fps");
 	//
@@ -764,14 +773,15 @@ void WIMainMenuOptions::InitializeVideoSettings()
 	m_hdrr = pList->AddToggleChoice(Locale::GetText("hdrr"), "cl_render_hdrr")->GetHandle();
 	//
 	// Bloom
-	m_hBloom = pList->AddToggleChoice(Locale::GetText("bloom"), "cl_render_bloom")->GetHandle();
+	m_hBloom = pList->AddToggleChoice(Locale::GetText("bloom"), "render_bloom_enabled")->GetHandle();
+	// Parallax
+	m_hParallax = pList->AddToggleChoice(Locale::GetText("parallax_mapping"), "render_parallaxmapping_enabled")->GetHandle();
 	//
 	// Motion Blur
 	m_hMotionBlur = pList->AddSlider(Locale::GetText("motion_blur"), sliderInitializer, "cl_render_motion_blur")->GetHandle();
 	//
 	// Horizontal FOV
-	pList->AddSlider(
-	  Locale::GetText("horizontal_fov"), [](WISlider *pSlider) { pSlider->SetRange(60, 120); }, "cl_render_fov");
+	pList->AddSlider(Locale::GetText("horizontal_fov"), [](WISlider *pSlider) { pSlider->SetRange(60, 120); }, "cl_render_fov");
 	//
 	// Brightness
 	pList->AddSlider(Locale::GetText("brightness"), sliderInitializer, "cl_render_brightness");
@@ -916,22 +926,13 @@ void WIMainMenuOptions::InitializeVideoSettings()
 	m_hDynamicShadows = pList->AddToggleChoice(Locale::GetText("shadow_enable_dynamic"), "cl_render_shadow_dynamic")->GetHandle();
 	//
 	// Shadow Update Frequency
-	m_hShadowUpdateFrequency = pList
-	                             ->AddSlider(
-	                               Locale::GetText("shadow_update_frequency"), [](WISlider *pSlider) { pSlider->SetRange(0, 10); }, "cl_render_shadow_update_frequency")
-	                             ->GetHandle();
+	m_hShadowUpdateFrequency = pList->AddSlider(Locale::GetText("shadow_update_frequency"), [](WISlider *pSlider) { pSlider->SetRange(0, 10); }, "cl_render_shadow_update_frequency")->GetHandle();
 	//
 	// PSSM Shadow Update Frequency Offset
-	m_hPssmShadowUpdateFrequencyOffset = pList
-	                                       ->AddSlider(
-	                                         Locale::GetText("shadow_pssm_update_frequency_offset"), [](WISlider *pSlider) { pSlider->SetRange(0, 10); }, "cl_render_shadow_pssm_update_frequency_offset")
-	                                       ->GetHandle();
+	m_hPssmShadowUpdateFrequencyOffset = pList->AddSlider(Locale::GetText("shadow_pssm_update_frequency_offset"), [](WISlider *pSlider) { pSlider->SetRange(0, 10); }, "cl_render_shadow_pssm_update_frequency_offset")->GetHandle();
 	//
 	// PSSM Split Count
-	m_hPssmSplitCount = pList
-	                      ->AddSlider(
-	                        Locale::GetText("shadow_pssm_split_count"), [](WISlider *pSlider) { pSlider->SetRange(1.f, static_cast<float>(pragma::CShadowCSMComponent::MAX_CASCADE_COUNT)); }, "cl_render_shadow_pssm_split_count")
-	                      ->GetHandle();
+	m_hPssmSplitCount = pList->AddSlider(Locale::GetText("shadow_pssm_split_count"), [](WISlider *pSlider) { pSlider->SetRange(1.f, static_cast<float>(pragma::CShadowCSMComponent::MAX_CASCADE_COUNT)); }, "cl_render_shadow_pssm_split_count")->GetHandle();
 	//
 	// TODO Restore defaults
 
@@ -998,20 +999,23 @@ void WIMainMenuOptions::InitializeVideoSettings()
 		}
 	}
 
-	auto showAdvancedOptions = c_engine->IsDeveloperModeEnabled();
+	//8/21/2024
+	//HACK set this to always be false advanced options, in order to ensure only working settings show
+	auto showAdvancedOptions = false;
 	if(showAdvancedOptions == false) {
 		pList->GetRow("cl_render_vsync_enabled")->SetVisible(false);
 		pList->GetRow("cl_material_streaming_enabled")->SetVisible(false);
-		pList->GetRow("cl_render_anti_aliasing")->SetVisible(false);
+		pList->GetRow("cl_render_anti_aliasing")->SetVisible(true);
 		pList->GetRow("cl_render_ssao")->SetVisible(false);
 		pList->GetRow("cl_render_hdrr")->SetVisible(false);
-		pList->GetRow("cl_render_bloom")->SetVisible(false);
+		pList->GetRow("render_bloom_enabled")->SetVisible(true);
+		pList->GetRow("render_parallaxmapping_enabled")->SetVisible(true);
 		pList->GetRow("cl_render_motion_blur")->SetVisible(false);
 		pList->GetRow("cl_render_occlusion_culling")->SetVisible(false);
 		pList->GetRow("cl_render_depth_of_field")->SetVisible(false);
 		pList->GetRow("cl_render_present_mode")->SetVisible(false);
-		pList->GetRow("cl_render_particle_quality")->SetVisible(false);
-		pList->GetRow("cl_render_reflection_quality")->SetVisible(false);
+		pList->GetRow("cl_render_particle_quality")->SetVisible(true);
+		pList->GetRow("cl_render_reflection_quality")->SetVisible(true);
 		pList->GetRow("cl_render_shadow_resolution")->SetVisible(false);
 		pList->GetRow("cl_render_shadow_dynamic")->SetVisible(false);
 		pList->GetRow("cl_render_shadow_update_frequency")->SetVisible(false);
@@ -1099,23 +1103,19 @@ void WIMainMenuOptions::InitializeAudioSettings()
 	//
 
 	// Number of rays
-	pList->AddSlider(
-	  Locale::GetText("steam_audio_number_of_rays"), [](WISlider *pSlider) { pSlider->SetRange(1'024, 131'072, 1'024); }, "cl_steam_audio_number_of_rays");
+	pList->AddSlider(Locale::GetText("steam_audio_number_of_rays"), [](WISlider *pSlider) { pSlider->SetRange(1'024, 131'072, 1'024); }, "cl_steam_audio_number_of_rays");
 	//
 
 	// Number of bounces
-	pList->AddSlider(
-	  Locale::GetText("steam_audio_number_of_bounces"), [](WISlider *pSlider) { pSlider->SetRange(1, 32, 1); }, "cl_steam_audio_number_of_bounces");
+	pList->AddSlider(Locale::GetText("steam_audio_number_of_bounces"), [](WISlider *pSlider) { pSlider->SetRange(1, 32, 1); }, "cl_steam_audio_number_of_bounces");
 	//
 
 	// Ir duration
-	pList->AddSlider(
-	  Locale::GetText("steam_audio_ir_duration"), [](WISlider *pSlider) { pSlider->SetRange(0.5f, 4.0f, 0.1f); }, "cl_steam_audio_ir_duration");
+	pList->AddSlider(Locale::GetText("steam_audio_ir_duration"), [](WISlider *pSlider) { pSlider->SetRange(0.5f, 4.0f, 0.1f); }, "cl_steam_audio_ir_duration");
 	//
 
 	// Ambisonics order
-	pList->AddSlider(
-	  Locale::GetText("steam_audio_ambisonics_order"), [](WISlider *pSlider) { pSlider->SetRange(0, 3, 1); }, "cl_steam_audio_ambisonics_order");
+	pList->AddSlider(Locale::GetText("steam_audio_ambisonics_order"), [](WISlider *pSlider) { pSlider->SetRange(0, 3, 1); }, "cl_steam_audio_ambisonics_order");
 	//
 
 	// Sound propagation delay
@@ -1133,8 +1133,7 @@ void WIMainMenuOptions::InitializeControlSettings()
 	ustring::to_upper(title);
 	pList->SetTitle(title);
 	// Mouse Sensitivity
-	pList->AddSlider(
-	  Locale::GetText("mouse_sensitivity"), [](WISlider *pSlider) { pSlider->SetRange(0.f, 4.f, 0.f); }, "cl_mouse_sensitivity");
+	pList->AddSlider(Locale::GetText("mouse_sensitivity"), [](WISlider *pSlider) { pSlider->SetRange(0.f, 4.f, 0.f); }, "cl_mouse_sensitivity");
 	//
 
 	// Invert Y-Axis

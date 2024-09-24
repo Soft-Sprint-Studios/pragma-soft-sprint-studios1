@@ -181,6 +181,9 @@ void WIMainMenu::Initialize()
 	menu->SetSize(GetWidth(), GetHeight());
 	menu->SetAnchor(0.f, 0.f, 1.f, 1.f);
 	menu->AddMenuItem(Locale::GetText("menu_newgame"), FunctionCallback<>::Create([this]() { SetActiveMenu(m_hNewGame); }));
+	//8/23/2024
+	//Disabled ServerBrowser as its useless for us
+	 #ifdef ENABLED_SERVERBROWSER
 	menu->AddMenuItem(Locale::GetText("menu_find_servers"), FunctionCallback<>::Create([this]() {
 		if(m_hServerBrowser.IsValid())
 			m_hServerBrowser->Remove();
@@ -191,6 +194,7 @@ void WIMainMenu::Initialize()
 		sb->SetPos(200, 200);
 		sb->RequestFocus();
 	}));
+	#endif
 #ifdef _DEBUG
 	menu->AddMenuItem(Locale::GetText("menu_loadgame"), FunctionCallback<>::Create([this]() { SetActiveMenu(m_hLoad); }));
 #endif

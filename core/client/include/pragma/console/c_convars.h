@@ -45,6 +45,7 @@ REGISTER_CONVAR_CL(cl_show_fps, udm::Type::Boolean, "0", ConVarFlags::None, "Dis
 
 REGISTER_CONVAR_CL(render_vsync_enabled, udm::Type::Boolean, "1", ConVarFlags::Archive, "1 = Vertical sync enabled, 0 = disabled.");
 REGISTER_CONVAR_CL(render_normalmapping_enabled, udm::Type::Boolean, "1", ConVarFlags::Archive, "1 = Normal mapping enabled, 0 = disabled.");
+REGISTER_CONVAR_CL(render_parallaxmapping_enabled, udm::Type::Boolean, "1", ConVarFlags::Archive, "1 = Parallax mapping enabled, 0 = disabled.");
 REGISTER_CONVAR_CL(render_csm_max_distance, udm::Type::Float, "8192", ConVarFlags::Archive, "The maximum distance at which csm shadows are casted. A larger distance means lower quality.");
 REGISTER_CONVAR_CL(render_texture_filtering, udm::Type::UInt8, "1", ConVarFlags::Archive, "0 = Nearest-Neighbor, 1 = Bilinear, 2 = trilinear.");
 REGISTER_CONVAR_CL(render_hdr_max_exposure, udm::Type::Float, "8", ConVarFlags::Archive, "Expore will be clamped at this value. Can be overwritten by the map.");

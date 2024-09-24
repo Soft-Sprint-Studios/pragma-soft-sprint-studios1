@@ -266,7 +266,7 @@ REGISTER_SHARED_CONCOMMAND(
   ConVarFlags::None, "Finds similar console commands to whatever was given as argument.");
 
 REGISTER_ENGINE_CONCOMMAND(
-  listmaps,
+  maps,
   [](NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &) {
 	  std::vector<std::string> resFiles;
 	  auto exts = pragma::asset::get_supported_extensions(pragma::asset::Type::Map);
@@ -279,8 +279,7 @@ REGISTER_ENGINE_CONCOMMAND(
   },
   ConVarFlags::None, "");
 
-REGISTER_ENGINE_CONCOMMAND(
-  clear, [](NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &) { engine->ClearConsole(); }, ConVarFlags::None, "Clears everything in the console.");
+REGISTER_ENGINE_CONCOMMAND(clear, [](NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &) { engine->ClearConsole(); }, ConVarFlags::None, "Clears everything in the console.");
 
 REGISTER_ENGINE_CONCOMMAND(
   credits,
@@ -291,8 +290,7 @@ REGISTER_ENGINE_CONCOMMAND(
   },
   ConVarFlags::None, "Prints a list of developers.");
 
-REGISTER_ENGINE_CONCOMMAND(
-  version, [](NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &) { Con::cout << get_pretty_engine_version() << Con::endl; }, ConVarFlags::None, "Prints the current engine version to the console.");
+REGISTER_ENGINE_CONCOMMAND(version, [](NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &) { Con::cout << get_pretty_engine_version() << Con::endl; }, ConVarFlags::None, "Prints the current engine version to the console.");
 
 static void debug_profiling_print(NetworkState *, pragma::BasePlayerComponent *, std::vector<std::string> &)
 {

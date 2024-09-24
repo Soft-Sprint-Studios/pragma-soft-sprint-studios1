@@ -86,7 +86,6 @@
 #include "pragma/entities/prop/s_prop_dynamic.hpp"
 #include "pragma/entities/prop/s_prop_physics.h"
 #include "pragma/entities/trigger/s_trigger_gravity.h"
-#include "pragma/entities/trigger/s_trigger_hurt.h"
 #include "pragma/entities/trigger/s_trigger_push.h"
 #include "pragma/entities/trigger/s_trigger_remove.h"
 #include "pragma/entities/trigger/s_trigger_teleport.h"
@@ -192,7 +191,6 @@ void SGame::InitializeEntityComponents(pragma::EntityComponentManager &component
 	componentManager.RegisterComponentType<pragma::SPropDynamicComponent>("prop_dynamic", {"physics"});
 	componentManager.RegisterComponentType<pragma::SPropPhysicsComponent>("prop_physics", {"physics"});
 	componentManager.RegisterComponentType<pragma::STriggerGravityComponent>("trigger_gravity", {"gameplay/triggers"});
-	componentManager.RegisterComponentType<pragma::STriggerHurtComponent>("trigger_hurt", {"gameplay/triggers"});
 	componentManager.RegisterComponentType<pragma::STriggerPushComponent>("trigger_push", {"gameplay/triggers"});
 	componentManager.RegisterComponentType<pragma::STriggerRemoveComponent>("trigger_remove", {"gameplay/triggers"});
 	componentManager.RegisterComponentType<pragma::STriggerTeleportComponent>("trigger_teleport", {"gameplay/triggers"});

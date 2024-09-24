@@ -16,6 +16,7 @@
 #include "pragma/entities/components/usable_component.hpp"
 #include "pragma/entities/baseentity_events.hpp"
 #include "pragma/entities/entity_component_system_t.hpp"
+#include "pragma/entities/components/s_io_component.hpp"
 
 using namespace pragma;
 
@@ -27,6 +28,8 @@ void BaseFuncButtonComponent::Initialize()
 		auto &kvData = static_cast<CEKeyValueData &>(evData.get());
 		if(ustring::compare<std::string>(kvData.key, "use_sound", false))
 			m_kvUseSound = kvData.value;
+		else if(ustring::compare<std::string>(kvData.key, "locked_sound", false))
+			m_kvLockedSound = kvData.value;
 		else if(ustring::compare<std::string>(kvData.key, "wait", false))
 			m_kvWaitTime = util::to_float(kvData.value);
 		else
@@ -43,21 +46,52 @@ void BaseFuncButtonComponent::Initialize()
 	ent.AddComponent("model");
 	ent.AddComponent("sound_emitter");
 	ent.AddComponent<pragma::UsableComponent>();
+
+	BindEvent(SIOComponent::EVENT_HANDLE_INPUT, [this](std::reference_wrapper<pragma::ComponentEvent> evData) -> util::EventReply {
+		auto &inputData = static_cast<CEInputData &>(evData.get());
+		if(ustring::compare<std::string>(inputData.input, "Lock", false))
+			Lock();
+		else if(ustring::compare<std::string>(inputData.input, "Unlock", false))
+			Unlock();
+		else
+			return util::EventReply::Unhandled;
+		return util::EventReply::Handled;
+	});
 }
+
+void BaseFuncButtonComponent::Lock()
+{
+	m_isLocked = true;
+	if(m_lockedSound != nullptr)
+		m_lockedSound->Play();
+	auto *ioComponent = static_cast<pragma::BaseIOComponent *>(GetEntity().FindComponent("io").get());
+	if(ioComponent != nullptr)
+		ioComponent->TriggerOutput("OnUseLocked", nullptr);
+}
+void BaseFuncButtonComponent::Unlock() { m_isLocked = false; }
 
 util::EventReply BaseFuncButtonComponent::HandleEvent(ComponentEventId eventId, ComponentEvent &evData)
 {
 	if(BaseEntityComponent::HandleEvent(eventId, evData) == util::EventReply::Handled)
 		return util::EventReply::Handled;
 	if(eventId == UsableComponent::EVENT_ON_USE) {
-		if(m_useSound != nullptr)
-			m_useSound->Play();
-		auto &ent = GetEntity();
-		if(m_kvWaitTime > 0.f)
-			m_tNextUse = CFloat(ent.GetNetworkState()->GetGameState()->CurTime()) + m_kvWaitTime;
-		auto *ioComponent = static_cast<pragma::BaseIOComponent *>(GetEntity().FindComponent("io").get());
-		if(ioComponent != nullptr)
-			ioComponent->TriggerOutput("OnPressed", static_cast<const CEOnUseData &>(evData).entity);
+		if(m_isLocked) {
+			if(m_lockedSound != nullptr)
+				m_lockedSound->Play();
+			auto *ioComponent = static_cast<pragma::BaseIOComponent *>(GetEntity().FindComponent("io").get());
+			if(ioComponent != nullptr)
+				ioComponent->TriggerOutput("OnUseLocked", static_cast<const CEOnUseData &>(evData).entity);
+		}
+		else {
+			if(m_useSound != nullptr)
+				m_useSound->Play();
+			auto &ent = GetEntity();
+			if(m_kvWaitTime > 0.f)
+				m_tNextUse = CFloat(ent.GetNetworkState()->GetGameState()->CurTime()) + m_kvWaitTime;
+			auto *ioComponent = static_cast<pragma::BaseIOComponent *>(GetEntity().FindComponent("io").get());
+			if(ioComponent != nullptr)
+				ioComponent->TriggerOutput("OnPressed", static_cast<const CEOnUseData &>(evData).entity);
+		}
 	}
 	return util::EventReply::Unhandled;
 }
@@ -75,5 +109,12 @@ void BaseFuncButtonComponent::OnEntitySpawn()
 		auto pSoundEmitterComponent = static_cast<pragma::BaseSoundEmitterComponent *>(ent.FindComponent("sound_emitter").get());
 		if(pSoundEmitterComponent != nullptr)
 			m_useSound = pSoundEmitterComponent->CreateSound(m_kvUseSound, ALSoundType::Effect);
+		if(!m_kvLockedSound.empty()) {
+			ent.GetNetworkState()->PrecacheSound(m_kvLockedSound);
+			m_lockedSound = nullptr;
+			auto pSoundEmitterComponent = static_cast<pragma::BaseSoundEmitterComponent *>(ent.FindComponent("sound_emitter").get());
+			if(pSoundEmitterComponent != nullptr)
+				m_lockedSound = pSoundEmitterComponent->CreateSound(m_kvLockedSound, ALSoundType::Effect);
+		}
 	}
 }

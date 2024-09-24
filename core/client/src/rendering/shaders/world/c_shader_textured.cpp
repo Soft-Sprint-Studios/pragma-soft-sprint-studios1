@@ -348,6 +348,7 @@ std::shared_ptr<Texture> ShaderGameWorldLightingPass::GetTexture(const std::stri
 }
 
 static auto cvNormalMappingEnabled = GetClientConVar("render_normalmapping_enabled");
+static auto cvParallaxMappingEnabled = GetClientConVar("render_parallaxmapping_enabled");
 void ShaderGameWorldLightingPass::ApplyMaterialFlags(CMaterial &mat, rendering::shader_material::MaterialFlags &outFlags) const {}
 void ShaderGameWorldLightingPass::UpdateRenderFlags(CModelSubMesh &mesh, SceneFlags &inOutFlags) {}
 bool ShaderGameWorldLightingPass::IsDepthPrepassEnabled() const { return m_depthPrepassEnabled; }

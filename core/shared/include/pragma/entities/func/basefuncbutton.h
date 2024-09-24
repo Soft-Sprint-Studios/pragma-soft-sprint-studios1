@@ -16,11 +16,18 @@ namespace pragma {
 		virtual void Initialize() override;
 		virtual util::EventReply HandleEvent(ComponentEventId eventId, ComponentEvent &evData) override;
 		virtual void OnEntitySpawn() override;
+		void Lock();
+		void Unlock();
 	  protected:
 		std::string m_kvUseSound;
+		std::string m_kvLockedSound;
 		float m_kvWaitTime = 0.f;
 		float m_tNextUse = 0.f;
+
+		bool m_isLocked = false;
+
 		std::shared_ptr<ALSound> m_useSound = nullptr;
+		std::shared_ptr<ALSound> m_lockedSound = nullptr;
 	};
 };
 

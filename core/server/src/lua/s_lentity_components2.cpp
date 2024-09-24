@@ -25,7 +25,6 @@
 #include "pragma/entities/prop/s_prop_dynamic.hpp"
 #include "pragma/entities/prop/s_prop_physics.h"
 #include "pragma/entities/trigger/s_trigger_gravity.h"
-#include "pragma/entities/trigger/s_trigger_hurt.h"
 #include "pragma/entities/trigger/s_trigger_push.h"
 #include "pragma/entities/trigger/s_trigger_remove.h"
 #include "pragma/entities/trigger/s_trigger_teleport.h"
@@ -107,9 +106,6 @@ void RegisterLuaEntityComponents2_sv(lua_State *l, luabind::module_ &entsMod)
 
 	auto defSTriggerGravity = pragma::lua::create_entity_component_class<pragma::STriggerGravityComponent, pragma::BaseEntityTriggerGravityComponent>("TriggerGravityComponent");
 	entsMod[defSTriggerGravity];
-
-	auto defSTriggerHurt = pragma::lua::create_entity_component_class<pragma::STriggerHurtComponent, pragma::BaseTriggerHurtComponent>("TriggerHurtComponent");
-	entsMod[defSTriggerHurt];
 
 	auto defSTriggerPush = pragma::lua::create_entity_component_class<pragma::STriggerPushComponent, pragma::BaseTriggerPushComponent>("TriggerPushComponent");
 	entsMod[defSTriggerPush];

@@ -342,11 +342,6 @@ namespace Lua {
 	}
 
 	template<class TLuaClass, class THandle>
-	void register_base_trigger_hurt_component_methods(lua_State *l, TLuaClass &def)
-	{
-	}
-
-	template<class TLuaClass, class THandle>
 	void register_base_trigger_push_component_methods(lua_State *l, TLuaClass &def)
 	{
 	}
