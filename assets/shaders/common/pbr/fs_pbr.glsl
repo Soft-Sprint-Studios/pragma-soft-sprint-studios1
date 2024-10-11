@@ -178,4 +178,103 @@ vec4 calc_pbr(vec4 albedoColor, vec2 texCoords, uint debugMode, PbrMaterial pbrM
 	return result;
 }
 
+vec4 calc_pbr_blend(vec4 albedoColor, vec2 texCoords, vec4 normalMap, vec3 rmaMap, uint debugMode)
+{
+    // Metallic and Roughness material properties are packed together
+    // In glTF, these factors can be specified by fixed scalar values
+    // or from a metallic-roughness map
+    float perceptualRoughness = 0.0;
+    float metallic = 0.0;
+    vec4 baseColor = vec4(0.0, 0.0, 0.0, 1.0);
+    vec3 diffuseColor = vec3(0.0);
+    vec3 specularColor = vec3(0.0);
+    vec3 f0 = vec3(0.04);
+
+    // Fetch RMA directly from the blended map
+    perceptualRoughness = rmaMap[RMA_CHANNEL_ROUGHNESS] * 1.0;
+
+    perceptualRoughness *= pbrMat.roughnessFactor;
+    metallic = rmaMap[RMA_CHANNEL_METALNESS] * pbrMat.metalnessFactor;
+
+    baseColor = albedoColor;
+
+    // f0 = specular
+    diffuseColor = baseColor.rgb * (vec3(1.0) - f0) * (1.0 - metallic);
+    specularColor = mix(f0, baseColor.rgb, metallic);
+
+    perceptualRoughness = clamp(perceptualRoughness, 0.0, 1.0);
+    metallic = clamp(metallic, 0.0, 1.0);
+
+    // Roughness is authored as perceptual roughness; as is convention,
+    // convert to material roughness by squaring the perceptual roughness [2].
+    float alphaRoughness = perceptualRoughness * perceptualRoughness;
+
+    // Compute reflectance.
+    float reflectance = max(max(specularColor.r, specularColor.g), specularColor.b);
+
+    vec3 specularEnvironmentR0 = specularColor.rgb;
+    vec3 specularEnvironmentR90 = vec3(clamp(reflectance * 50.0, 0.0, 1.0));
+
+    float aoFactor = pbrMat.aoFactor;
+    MaterialInfo materialInfo = MaterialInfo(perceptualRoughness, specularEnvironmentR0, alphaRoughness, diffuseColor, specularEnvironmentR90, specularColor, aoFactor);
+
+    // Lighting
+    vec3 color;
+#if DEBUG_FORWARDP_OUTPUT_MODE != DEBUG_FORWARDP_OUTPUT_MODE_NONE
+    ivec2 location = ivec2(gl_FragCoord.xy);
+    uint tileSize = get_tile_size();
+    ivec2 tileID = location / ivec2(tileSize, tileSize);
+    uint index = tileID.y * get_number_of_tiles_x() + tileID.x;
+    uint tileStartOffset = index * MAX_SCENE_LIGHTS;
+#if DEBUG_FORWARDP_OUTPUT_MODE == DEBUG_FORWARDP_OUTPUT_MODE_DEPTH_BUFFER
+    float d = intBitsToFloat(visibleLightTileIndicesBuffer.data[tileStartOffset].index);
+    d = get_linearized_depth(d, u_renderSettings.nearZ, u_renderSettings.farZ);
+    color = vec3(d, d, d);
+#elif DEBUG_FORWARDP_OUTPUT_MODE == DEBUG_FORWARDP_OUTPUT_MODE_UV_X || DEBUG_FORWARDP_OUTPUT_MODE == DEBUG_FORWARDP_OUTPUT_MODE_UV_Y
+    float uvx = intBitsToFloat(visibleLightTileIndicesBuffer.data[tileStartOffset].index);
+    color = vec3(uvx, uvx, uvx);
+#elif DEBUG_FORWARDP_OUTPUT_MODE == DEBUG_FORWARDP_OUTPUT_MODE_LOCATION_X || DEBUG_FORWARDP_OUTPUT_MODE == DEBUG_FORWARDP_OUTPUT_MODE_LOCATION_Y
+    int v = visibleLightTileIndicesBuffer.data[tileStartOffset].index;
+    color = vec3(v, v, v) / 5000.0;
+#endif
+#else
+    if(CSPEC_DEBUG_MODE_ENABLED == 0)
+        color = calc_pbr_lighting(texCoords, materialInfo, materialFlags, baseColor);
+    else {
+        if((debugMode & DEBUG_MODE_UNLIT) != 0)
+            color = baseColor.rgb;
+        else
+            color = calc_pbr_lighting(texCoords, materialInfo, materialFlags, baseColor);
+        if((debugMode & DEBUG_MODE_FORWARD_PLUS_HEATMAP) != 0) {
+            apply_debug_heatmap_color(SCENE_SPOT_LIGHT_BUFFER_START, SCENE_SPOT_LIGHT_BUFFER_END, color);
+            apply_debug_heatmap_color(SCENE_POINT_LIGHT_BUFFER_START, SCENE_POINT_LIGHT_BUFFER_END, color);
+            apply_debug_heatmap_color(SCENE_DIRECTIONAL_LIGHT_BUFFER_START, SCENE_DIRECTIONAL_LIGHT_BUFFER_END, color);
+        }
+    }
+#endif
+
+    // Ao from the blended RMA map
+    float ao = rmaMap[RMA_CHANNEL_AO];
+
+    if(CSPEC_ENABLE_SSAO == 1) {
+        if(is_ssao_enabled() == true)
+            ao *= get_ssao_occlusion(get_viewport_width(), get_viewport_height());
+    }
+
+    // Apply optional PBR terms for additional (optional) shading
+    color = mix(color, color * ao, materialInfo.aoFactor * 0.7 + 0.3);
+
+    // regular shading
+    vec4 result = vec4(color.rgb, baseColor.a);
+
+    if(use_glow_map(materialFlags))
+        result = get_emission_color(result, baseColor, texCoords, materialEmissionFactor, materialFlags);
+
+    if(CSPEC_DEBUG_MODE_ENABLED == 1)
+        result = apply_debug_mode(materialFlags, debugMode, result, texCoords, diffuseColor, specularColor, metallic, perceptualRoughness, aoFactor, reflectance);
+
+    return result;
+}
+
+
 #endif
