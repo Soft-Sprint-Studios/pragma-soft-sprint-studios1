@@ -15,12 +15,7 @@ void main()
 	vec4 albedoColor = fetch_albedo_map(uv, instanceColor);
 	if(u_pushConstants.alphaCount > 0) {
 		vec4 albedoColor2 = fetch_albedo_map2(uv, instanceColor);
-		if(u_pushConstants.alphaCount > 1) {
-			vec4 albedoColor3 = fetch_albedo_map3(uv, instanceColor);
-			albedoColor = albedoColor * (1.0 - (fs_disp_in.alpha.x + fs_disp_in.alpha.y)) + albedoColor2 * fs_disp_in.alpha.x + albedoColor3 * fs_disp_in.alpha.y;
-		}
-		else
-			albedoColor = albedoColor * (1.0 - fs_disp_in.alpha.x) + albedoColor2 * fs_disp_in.alpha.x;
+		albedoColor = albedoColor * (1.0 - fs_disp_in.alpha.x) + albedoColor2 * fs_disp_in.alpha.x;
 	}
 	fs_color = calc_pbr(albedoColor, uv, u_pushConstants.debugMode);
 	extract_bright_color(fs_color);
