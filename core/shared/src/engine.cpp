@@ -30,7 +30,6 @@
 #include <sharedutils/util_parallel_job.hpp>
 #include <pragma/game/game_resources.hpp>
 #include <pragma/util/resource_watcher.h>
-#include <util_pad.hpp>
 #include <material_manager2.hpp>
 #include <pragma/networking/iserver.hpp>
 #include <pragma/addonsystem/addonsystem.h>
@@ -48,6 +47,7 @@
 #endif
 
 import util_zip;
+import pragma.pad;
 
 const pragma::IServerState &Engine::GetServerStateInterface() const
 {
@@ -131,7 +131,7 @@ Engine::Engine(int, char *[]) : CVarHandler(), m_logFile(nullptr), m_tickRate(En
 #endif
 
 	// Link package system to file system
-	m_padPackageManager = upad::link_to_file_system();
+	m_padPackageManager = pragma::pad::link_to_file_system();
 	m_assetManager = std::make_unique<pragma::asset::AssetManager>();
 
 	RegisterCallback<void>("Think");
@@ -215,7 +215,7 @@ void Engine::SetProfilingEnabled(bool bEnabled)
 	}
 }
 
-upad::PackageManager *Engine::GetPADPackageManager() const { return m_padPackageManager; }
+pragma::pad::PackageManager *Engine::GetPADPackageManager() const { return m_padPackageManager; }
 
 void Engine::LockResourceWatchers()
 {
@@ -930,9 +930,7 @@ void Engine::Start()
 
 void Engine::UpdateTickCount() { m_ctTick.Update(); }
 
-#ifdef _WIN32
 extern std::string g_crashExceptionMessage;
-#endif
 std::unique_ptr<uzip::ZIPFile> Engine::GenerateEngineDump(const std::string &baseName, std::string &outZipFileName, std::string &outErr)
 {
 	auto programPath = util::Path::CreatePath(util::get_program_path());
@@ -944,11 +942,10 @@ std::unique_ptr<uzip::ZIPFile> Engine::GenerateEngineDump(const std::string &bas
 		return nullptr;
 	}
 
-#ifdef _WIN32
 	// Write Exception
 	if(g_crashExceptionMessage.empty() == false)
 		zipFile->AddFile("exception.txt", g_crashExceptionMessage);
-
+#ifdef _WIN32
 	// Write Stack Backtrace
 	zipFile->AddFile("stack_backtrace.txt", util::get_formatted_stack_backtrace_string());
 #endif

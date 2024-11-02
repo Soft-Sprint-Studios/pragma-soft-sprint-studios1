@@ -24,6 +24,7 @@ namespace pragma::string {
 #include <pragma/engine_init.hpp>
 #include <pragma/console/convars.h>
 #include "pragma/console/engine_cvar.h"
+#include "pragma/debug/debug_utils.hpp"
 #include "pragma/model/c_modelmanager.h"
 #include "pragma/networking/iclient.hpp"
 #include "pragma/networking/local_client.hpp"
@@ -228,6 +229,10 @@ void CEngine::DumpDebugInformation(uzip::ZIPFile &zip) const
 	};
 	if(GetClientState())
 		fWriteLuaTraceback(static_cast<ClientState *>(GetClientState())->GetGUILuaState(), "gui");
+
+	std::stringstream engineInfo;
+	engineInfo << "Render API: " << GetRenderAPI();
+	zip.AddFile("engine_cl.txt", engineInfo.str());
 
 #if 0
 	prosper::debug::dump_layers(c_engine->GetRenderContext(),ss);
@@ -546,8 +551,11 @@ void CEngine::OnFilesDropped(prosper::Window &window, std::vector<std::string> &
 				addFile(f, rootPath ? *rootPath : ufile::get_path_from_filename(f));
 			else if(filemanager::is_system_dir(f)) {
 				auto subRootPath = rootPath;
-				if(!subRootPath)
-					subRootPath = f;
+				if(!subRootPath) {
+					auto path = util::Path::CreatePath(f);
+					path.PopBack();
+					subRootPath = path.GetString();
+				}
 				std::vector<std::string> subFiles;
 				std::vector<std::string> subDirs;
 				filemanager::find_system_files(f + "/*", &subFiles, &subDirs);
@@ -634,6 +642,23 @@ extern std::optional<Color> g_titleBarColor;
 extern std::optional<Color> g_borderColor;
 extern bool g_windowless;
 void register_game_shaders();
+
+void CEngine::HandleOpenGLFallback()
+{
+	if(ustring::compare(GetRenderAPI(), std::string {"opengl"}, false))
+		return;
+	auto *cl = static_cast<ClientState *>(GetClientState());
+	if(!cl)
+		return;
+	auto msg = Locale::GetText("prompt_fallback_to_opengl");
+	if(pragma::debug::show_message_prompt(msg, pragma::debug::MessageBoxButtons::YesNo, util::get_program_name()) != pragma::debug::MessageBoxButton::Yes)
+		return;
+	cl->SetConVar("render_api", "opengl");
+	SaveClientConfig();
+	ShutDown();
+	util::start_process(util::get_program_name().c_str());
+}
+
 bool CEngine::Initialize(int argc, char *argv[])
 {
 	Engine::Initialize(argc, argv);

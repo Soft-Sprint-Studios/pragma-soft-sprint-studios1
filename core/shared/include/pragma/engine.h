@@ -45,7 +45,7 @@ struct Color;
 namespace Con {
 	enum class MessageFlags : uint8_t;
 };
-namespace upad {
+namespace pragma::pad {
 	class PackageManager;
 };
 namespace util {
@@ -144,6 +144,7 @@ class DLLNETWORK Engine : public CVarHandler, public CallbackHandler {
 	virtual void Close();
 	virtual void Release();
 	virtual void ClearConsole();
+	virtual void HandleOpenGLFallback() {};
 	void ClearCache();
 
 	void SetRunUpdaterOnClose(bool run);
@@ -162,7 +163,7 @@ class DLLNETWORK Engine : public CVarHandler, public CallbackHandler {
 	bool StartProfilingStage(const char *stage);
 	bool StopProfilingStage();
 
-	upad::PackageManager *GetPADPackageManager() const;
+	pragma::pad::PackageManager *GetPADPackageManager() const;
 
 	void SetVerbose(bool bVerbose);
 	bool IsVerbose() const;
@@ -345,7 +346,7 @@ class DLLNETWORK Engine : public CVarHandler, public CallbackHandler {
 	std::queue<std::function<void()>> m_tickEventQueue;
 	std::mutex m_tickEventQueueMutex;
 	StateFlags m_stateFlags;
-	mutable upad::PackageManager *m_padPackageManager = nullptr;
+	mutable pragma::pad::PackageManager *m_padPackageManager = nullptr;
 	std::unique_ptr<pragma::debug::ProfilingStageManager<pragma::debug::ProfilingStage>> m_profilingStageManager;
 
 	std::unordered_map<std::string, std::function<void(int, char *[])>> m_launchOptions;
